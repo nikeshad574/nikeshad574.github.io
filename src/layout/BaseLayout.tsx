@@ -1,10 +1,11 @@
 import { Outlet } from "react-router";
+import BaseNavbar from "../components/BaseNavbar";
 
 function BaseLayout() {
   return (
     <>
-      <nav>NavBar</nav>
-      <main>
+      <BaseNavbar />
+      <main className="nav-height">
         <Outlet />
       </main>
     </>

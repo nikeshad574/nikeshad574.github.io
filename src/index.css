@@ -1,1 +1,37 @@
 @import "tailwindcss";
+
+@theme {
+  --primary-hsl: 245, 38%;
+  --color-primary: hsl(var(--primary-hsl), 35%);
+
+  --color-primary-50: hsl(var(--primary-hsl), 95%);
+  --color-primary-100: hsl(var(--primary-hsl), 90%);
+  --color-primary-200: hsl(var(--primary-hsl), 80%);
+  --color-primary-300: hsl(var(--primary-hsl), 70%);
+  --color-primary-400: hsl(var(--primary-hsl), 60%);
+  --color-primary-500: hsl(var(--primary-hsl), 50%);
+  --color-primary-600: hsl(var(--primary-hsl), 40%);
+  --color-primary-700: hsl(var(--primary-hsl), 30%);
+  --color-primary-800: hsl(var(--primary-hsl), 20%);
+  --color-primary-900: hsl(var(--primary-hsl), 10%);
+  --color-primary-950: hsl(var(--primary-hsl), 5%);
+
+  --color-background: hsl(247, 29%, 6%);
+}
+
+@layer {
+  body {
+    background: linear-gradient(180deg, hsl(247, 29%, 6%), hsl(247, 29%, 15%))
+      no-repeat;
+    color: hsl(248, 19%, 92%);
+    min-height: 100svh;
+  }
+
+  .container {
+    @apply max-w-6xl mx-auto p-2;
+  }
+
+  .nav-height {
+    @apply h-14;
+  }
+}
