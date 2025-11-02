@@ -73,7 +73,7 @@ const Typewriter = ({
             repeat: Infinity,
             repeatType: "reverse",
           }}
-          className="inline-block"
+          className="inline-block z-10"
         >
           {cursorChar}
         </motion.span>

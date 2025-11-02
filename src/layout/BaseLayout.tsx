@@ -5,7 +5,7 @@ function BaseLayout() {
   return (
     <>
       <BaseNavbar />
-      <main className="nav-height">
+      <main className="margin-nav-height">
         <Outlet />
       </main>
     </>

@@ -5,7 +5,7 @@ import AnimatedBlob from "../../components/AnimatedBlob";
 function Home() {
   return (
     <section>
-      <section className="container h-full-minus-nav flex flex-col sm:flex-row">
+      <section className="container h-screen h-full-minus-nav flex flex-col sm:flex-row">
         <div className="p-2 w-full flex flex-col gap-3 justify-center">
           <h1 className="text-3xl font-medium">Hi, I’m Nikesh Adhikari.</h1>
           <div className="flex gap-2 mb-2">
@@ -42,11 +42,15 @@ function Home() {
           </motion.button>
         </div>
 
-        <div className="w-xl h-96 sm:h-full flex items-center justify-center relative">
+        <div className="sm:w-xl h-96 sm:h-full flex items-center justify-center relative">
           <div className="w-full lg:w-lg absolute">
             <AnimatedBlob />
           </div>
         </div>
+      </section>
+
+      <section className="">
+        <div className="h-52 w-52 bg-red-500"></div>
       </section>
     </section>
   );

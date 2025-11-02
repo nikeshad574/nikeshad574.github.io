@@ -30,7 +30,7 @@ function AnimatedBlob() {
       </defs>
 
       <image
-        href="meme.png"
+        href="me_photo.png"
         width="100%"
         height="100%"
         clipPath="url(#blobClip)"

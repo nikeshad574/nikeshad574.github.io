@@ -6,7 +6,7 @@ import { NAVBAR_CONST } from "../conf/constants";
 
 function BaseNavbar() {
   return (
-    <nav className="flex items-center justify-between nav-height border-b border-primary-800 px-4 py-2 bg-text">
+    <nav className="flex items-center justify-between fixed top-0 left-0 right-0 bg-primary-900/50 backdrop-blur-xs z-40 nav-height border-b border-primary-800 px-4 py-2 bg-text">
       <div className="h-full flex gap-4 items-center">
         <div className=" md:hidden">
           <BaseMobileNav />
@@ -26,7 +26,7 @@ function BaseNavbar() {
         </div>
       </div>
 
-      <div className="hidden md: h-full gap-4">
+      <div className="hidden md:flex h-full gap-4">
         <Link
           to="/external"
           className="flex gap-2 items-center justify-center px-2 rounded-sm font-medium"

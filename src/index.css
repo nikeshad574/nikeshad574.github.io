@@ -37,6 +37,10 @@
     @apply h-14;
   }
 
+  .margin-nav-height {
+    margin-top: theme(height.14);
+  }
+
   @media (min-width: 40rem) {
     .h-full-minus-nav {
       height: calc(100svh - theme(height.14));
