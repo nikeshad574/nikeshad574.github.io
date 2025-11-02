@@ -1,6 +1,7 @@
-import { Globe } from "lucide-react";
+import { ChevronRightCircle, Globe } from "lucide-react";
 import { Link } from "react-router";
 import cns from "../utils/classNames";
+import { motion } from "motion/react";
 
 interface ProjectCardProps {
   className?: string;
@@ -9,7 +10,14 @@ interface ProjectCardProps {
 
 function ProjectCard({ className, designType = "vert" }: ProjectCardProps) {
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      whileHover={{
+        scale: 1.03,
+        boxShadow: "0 10px 10px rgba(255,255,255,0.1)",
+      }}
       className={cns(
         "bg-primary-900 w-full p-4 rounded-lg flex",
         designType === "vert" ? "flex-col gap-4" : "flex-row gap-4",
@@ -47,6 +55,14 @@ function ProjectCard({ className, designType = "vert" }: ProjectCardProps) {
             >
               <Globe />
             </Link>
+
+            <Link
+              to="/"
+              className="h-8 w-8 p-0.5 hover:text-primary-400"
+              title="Read More"
+            >
+              <ChevronRightCircle />
+            </Link>
           </div>
         </div>
       </div>
@@ -63,7 +79,7 @@ function ProjectCard({ className, designType = "vert" }: ProjectCardProps) {
           molestias illo facere commodi officiis dolores.
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
