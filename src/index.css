@@ -26,12 +26,20 @@
     color: hsl(248, 19%, 92%);
     min-height: 100svh;
   }
+}
 
+@layer utilities {
   .container {
     @apply max-w-6xl mx-auto p-2;
   }
 
   .nav-height {
     @apply h-14;
+  }
+
+  @media (min-width: 40rem) {
+    .h-full-minus-nav {
+      height: calc(100svh - theme(height.14));
+    }
   }
 }
