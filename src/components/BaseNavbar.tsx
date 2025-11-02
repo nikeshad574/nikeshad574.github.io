@@ -1,28 +1,19 @@
 import { Link, NavLink } from "react-router";
 import Logo from "./Logo";
 import { ExternalLink } from "lucide-react";
-
-const NAVBAR_CONST = [
-  {
-    title: "Projects",
-    link: "/project",
-  },
-  {
-    title: "Experiences",
-    link: "/experiences",
-  },
-  {
-    title: "About Me",
-    link: "/about",
-  },
-];
+import BaseMobileNav from "./BaseMobileNav";
+import { NAVBAR_CONST } from "../conf/constants";
 
 function BaseNavbar() {
   return (
-    <nav className="flex items-center justify-between nav-height border-b border-slate-800 px-4 py-2 bg-text">
+    <nav className="flex items-center justify-between nav-height border-b border-primary-800 px-4 py-2 bg-text">
       <div className="h-full flex gap-4 items-center">
+        <div className=" md:hidden">
+          <BaseMobileNav />
+        </div>
+
         <Logo className="h-full p-1" />
-        <div className=" flex h-full gap-2">
+        <div className="hidden md:flex h-full gap-2 ">
           {NAVBAR_CONST.map((item) => (
             <NavLink
               key={item.title}
@@ -35,7 +26,7 @@ function BaseNavbar() {
         </div>
       </div>
 
-      <div className="h-full flex gap-4">
+      <div className="hidden md: h-full gap-4">
         <Link
           to="/external"
           className="flex gap-2 items-center justify-center px-2 rounded-sm font-medium"
