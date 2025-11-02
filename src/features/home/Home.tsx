@@ -2,6 +2,9 @@ import { motion } from "motion/react";
 import Typewriter from "../../components/Typewriter";
 import AnimatedBlob from "../../components/AnimatedBlob";
 import SkillsTicker from "../../components/SkillsTicker";
+import { Link } from "react-router";
+import { ExternalLink, Globe, LinkIcon } from "lucide-react";
+import ProjectCard from "../../components/ProjectCard";
 
 function Home() {
   return (
@@ -52,6 +55,27 @@ function Home() {
 
       <section className="container">
         <SkillsTicker />
+      </section>
+
+      <section className="container">
+        <h2 className="text-3xl font-medium mb-4 flex justify-center gap-2 mx-auto">
+          <span className="w-1.5 bg-primary rounded-md" />
+          Featured Projects
+        </h2>
+
+        <p className="text-md text-center mb-4">
+          A few highlights from the things I’ve been building lately.
+        </p>
+
+        <div className="grid grid-cols-3 grid-rows-2 gap-4">
+          <ProjectCard className="row-span-2" />
+          <ProjectCard className="col-span-2" designType="horiz" />
+          <ProjectCard
+            className="col-span-2 col-start-2 row-start-2"
+            designType="horiz"
+          />
+          {/* <ProjectCard className="col-start-2 row-start-3" designType="horiz" /> */}
+        </div>
       </section>
     </section>
   );
