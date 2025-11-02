@@ -5,8 +5,11 @@ import SkillsTicker from "../../components/SkillsTicker";
 import { Link } from "react-router";
 import { ExternalLink, Globe, LinkIcon } from "lucide-react";
 import ProjectCard from "../../components/ProjectCard";
+import useInnerScreen from "../../hooks/useInnerScreen";
 
 function Home() {
+  const { innerW } = useInnerScreen();
+
   return (
     <section className="flex flex-col gap-10 pb-10">
       <section className="container h-screen h-full-minus-nav flex flex-col sm:flex-row">
@@ -67,14 +70,19 @@ function Home() {
           A few highlights from the things I’ve been building lately.
         </p>
 
-        <div className="grid grid-cols-3 grid-rows-2 gap-4">
-          <ProjectCard className="row-span-2" />
-          <ProjectCard className="col-span-2" designType="horiz" />
+        <div className="flex flex-wrap md:grid md:grid-cols-3 md:grid-rows-2 gap-4">
           <ProjectCard
-            className="col-span-2 col-start-2 row-start-2"
-            designType="horiz"
+            className="md:row-span-2"
+            designType={innerW < 768 && innerW > 640 ? "horiz" : "vert"}
           />
-          {/* <ProjectCard className="col-start-2 row-start-3" designType="horiz" /> */}
+          <ProjectCard
+            className="md:col-span-2 "
+            designType={innerW > 640 ? "horiz" : "vert"}
+          />
+          <ProjectCard
+            className="md:col-span-2 md:col-start-2 md:row-start-2"
+            designType={innerW > 640 ? "horiz" : "vert"}
+          />
         </div>
       </section>
     </section>

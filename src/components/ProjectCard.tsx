@@ -16,8 +16,13 @@ function ProjectCard({ className, designType = "vert" }: ProjectCardProps) {
         className
       )}
     >
-      <div className="h-56 w-full flex-1/2 bg-primary-800  relative">
-        <div className="bg-primary-900 pt-2 pl-2 rounded-tl-xl absolute right-0 bottom-0">
+      <div className="h-56 w-full flex-1/2 bg-primary-800 rounded-xl  relative">
+        <img
+          src="test.png"
+          alt=""
+          className="h-full rounded-xl w-full object-cover"
+        />
+        <div className=" bg-primary-900 pt-2 pl-2 rounded-tl-xl absolute right-0 bottom-0">
           <div className="flex items-center justify-center gap-2 p-2 bg-primary-800 rounded-xl  ring-primary-900">
             <Link
               to="/projects"
