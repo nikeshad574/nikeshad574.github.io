@@ -1,10 +1,11 @@
 import { motion } from "motion/react";
 import Typewriter from "../../components/Typewriter";
 import AnimatedBlob from "../../components/AnimatedBlob";
+import SkillsTicker from "../../components/SkillsTicker";
 
 function Home() {
   return (
-    <section>
+    <section className="flex flex-col gap-10 pb-10">
       <section className="container h-screen h-full-minus-nav flex flex-col sm:flex-row">
         <div className="p-2 w-full flex flex-col gap-3 justify-center">
           <h1 className="text-3xl font-medium">Hi, I’m Nikesh Adhikari.</h1>
@@ -49,8 +50,8 @@ function Home() {
         </div>
       </section>
 
-      <section className="">
-        <div className="h-52 w-52 bg-red-500"></div>
+      <section className="container">
+        <SkillsTicker />
       </section>
     </section>
   );
