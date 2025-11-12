@@ -121,7 +121,7 @@ function Home() {
         </p>
 
         <div className="flex flex-col sm:flex-row justify-between">
-          <div className="bg-radial from-primary-800 to-primary-900/80  rounded-lg flex-1/2 flex flex-col gap-4 items-center justify-center p-4">
+          <div className="bg-radial from-primary-900 to-primary-900/20  rounded-lg flex-1/2 flex flex-col gap-4 items-center justify-center p-4">
             <div>
               <h3 className="text-2xl font-medium">Nikesh Adhikari</h3>
               <div className="flex gap-2">
