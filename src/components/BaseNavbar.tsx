@@ -12,13 +12,15 @@ function BaseNavbar() {
           <BaseMobileNav />
         </div>
 
-        <Logo className="h-full p-1" />
+        <Link to="/" className="h-full">
+          <Logo className="h-full p-1" />
+        </Link>
         <div className="hidden md:flex h-full gap-2 ">
           {NAVBAR_CONST.map((item) => (
             <NavLink
               key={item.title}
               to={item.link}
-              className="flex hover:bg-primary-800 delay-150 items-center justify-center px-2 rounded-sm font-medium"
+              className="flex hover:bg-primary-800/30 hover:text-shadow-md text-shadow-primary-400/60 delay-150 items-center justify-center px-2 rounded-sm font-medium"
             >
               {item.title}
             </NavLink>

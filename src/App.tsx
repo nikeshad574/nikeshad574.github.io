@@ -10,6 +10,7 @@ function App() {
         <Routes>
           <Route element={<BaseLayout />}>
             <Route index element={<P.Home />} />
+            <Route path="projects" element={<P.Projects />} />
           </Route>
         </Routes>
       </BrowserRouter>

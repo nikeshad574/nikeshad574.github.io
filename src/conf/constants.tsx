@@ -1,7 +1,7 @@
 export const NAVBAR_CONST = [
   {
     title: "Projects",
-    link: "/project",
+    link: "/projects",
   },
   {
     title: "Experiences",
