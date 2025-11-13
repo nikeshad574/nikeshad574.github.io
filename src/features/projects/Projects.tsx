@@ -1,7 +1,11 @@
-import { BadgeX, Cross, Filter } from "lucide-react";
+import { BadgeX, Filter } from "lucide-react";
 import ProjectCard from "../../components/ProjectCard";
+import { useState } from "react";
+import ProjectFiltersOverlay from "./ProjectFiltersOverlay";
 
 function Projects() {
+  const [showFilters, setShowFilters] = useState(false);
+
   return (
     <section className="flex flex-col pb-10">
       <div className="container flex flex-wrap gap-2 md:gap-4  items-center justify-between">
@@ -22,7 +26,10 @@ function Projects() {
             ))}
           </div>
 
-          <button className="flex items-center gap-2 px-4 py-2 bg-primary rounded-md cursor-pointer">
+          <button
+            className="flex items-center gap-2 px-4 py-2 bg-primary rounded-md cursor-pointer"
+            onClick={() => setShowFilters(!showFilters)}
+          >
             <Filter className="h-5 w-5" />
             Filters
           </button>
@@ -30,7 +37,7 @@ function Projects() {
       </div>
 
       {/* Container for Project Cards */}
-      <div className="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+      <div className="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8 mb-6">
         {Array.from({ length: 6 }).map((_, index) => (
           <ProjectCard key={index} />
         ))}
@@ -39,6 +46,11 @@ function Projects() {
       <button className="cursor-pointer mx-auto bg-primary hover:bg-primary-800 px-4 py-2 rounded-md">
         Load More...
       </button>
+
+      <ProjectFiltersOverlay
+        isOpen={showFilters}
+        onClose={() => setShowFilters(false)}
+      />
     </section>
   );
 }
