@@ -8,7 +8,7 @@ function Projects() {
 
   return (
     <section className="flex flex-col pb-10">
-      <div className="container flex flex-wrap gap-2 md:gap-4  items-center justify-between">
+      <div className="container flex flex-wrap gap-2 md:gap-4 items-center justify-between">
         <h1 className="text-3xl font-medium">Projects</h1>
 
         <div className="flex flex-wrap items-center gap-4">
