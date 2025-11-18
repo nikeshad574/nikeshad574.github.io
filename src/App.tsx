@@ -11,6 +11,9 @@ function App() {
           <Route element={<BaseLayout />}>
             <Route index element={<P.Home />} />
             <Route path="projects" element={<P.Projects />} />
+            <Route path="experiences" element={<P.Experiences />} />
+            <Route path="about" element={<P.AboutMe />} />
+            <Route path="contact" element={<P.Contact />} />
           </Route>
         </Routes>
       </BrowserRouter>
