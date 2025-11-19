@@ -24,7 +24,7 @@
     background: linear-gradient(180deg, hsl(247, 29%, 6%), hsl(247, 29%, 15%))
       no-repeat;
     color: hsl(248, 19%, 92%);
-    min-height: 100svh;
+    min-height: calc(100svh - theme(height.14));
   }
 }
 

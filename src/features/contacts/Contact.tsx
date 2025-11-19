@@ -1,5 +1,11 @@
+import GetInTouchContainer from "../home/GetInTouchContainer";
+
 function Contact() {
-  return <div>Contact</div>;
+  return (
+    <section className="container">
+      <GetInTouchContainer />
+    </section>
+  );
 }
 
 export default Contact;
