@@ -14,7 +14,7 @@ function AnimatedBlob() {
         <clipPath id="blobClip">
           <motion.path
             fill="#FF0066"
-            d={bobAnimationDValues[0]}
+            initial={{ d: bobAnimationDValues[0] }}
             animate={{
               d: bobAnimationDValues,
             }}
