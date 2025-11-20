@@ -2,11 +2,11 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import P from "./Page";
 import { Suspense } from "react";
 import BaseLayout from "./layout/BaseLayout";
-import SuspenseFallBackWithNav from "./components/SuspenseFallBackWithNav";
+import SuspenseFallBack from "./components/SuspenseFallBack";
 
 function App() {
   return (
-    <Suspense fallback={<SuspenseFallBackWithNav />}>
+    <Suspense fallback={<SuspenseFallBack />}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<BaseLayout />}>

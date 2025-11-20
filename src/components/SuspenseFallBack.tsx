@@ -1,6 +1,6 @@
 import { LoaderPinwheel } from "lucide-react";
 
-function SuspenseFallBackWithNav() {
+function SuspenseFallBack() {
   return (
     <>
       <section className="margin-nav-height h-full-minus-nav flex flex-col items-center justify-center">
@@ -10,4 +10,4 @@ function SuspenseFallBackWithNav() {
   );
 }
 
-export default SuspenseFallBackWithNav;
+export default SuspenseFallBack;
