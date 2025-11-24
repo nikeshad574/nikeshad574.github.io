@@ -31,7 +31,7 @@ function ProjectCard({ className, designType = "vert" }: ProjectCardProps) {
         )}
       >
         <img
-          src="test.png"
+          src="/test.png"
           alt=""
           className="h-full rounded-xl w-full object-cover"
         />
