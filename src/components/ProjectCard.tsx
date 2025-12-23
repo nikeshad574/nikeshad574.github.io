@@ -2,13 +2,20 @@ import { ChevronRightCircle, Globe } from "lucide-react";
 import { Link } from "react-router";
 import cns from "../utils/classNames";
 import { motion } from "motion/react";
+import type { ProjectRowResp } from "../types/project.type";
+import { stripHTMLTags } from "../utils/commonUtils";
 
 interface ProjectCardProps {
   className?: string;
   designType?: "vert" | "horiz";
+  project: ProjectRowResp;
 }
 
-function ProjectCard({ className, designType = "vert" }: ProjectCardProps) {
+function ProjectCard({
+  className,
+  designType = "vert",
+  project,
+}: ProjectCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -31,38 +38,43 @@ function ProjectCard({ className, designType = "vert" }: ProjectCardProps) {
         )}
       >
         <img
-          src="/test.png"
-          alt=""
+          src={project.imageUrl}
+          alt={project.title}
+          loading="lazy"
           className="h-full rounded-xl w-full object-cover"
         />
         <div className=" bg-primary-900 pt-2 pl-2 rounded-tl-xl absolute right-0 bottom-0">
           <div className="flex items-center justify-center gap-2 p-2 bg-primary-800 rounded-xl  ring-primary-900">
-            <Link
-              to="/projects"
-              className="h-8 w-8 p-0.5 hover:text-primary-400"
-              title="View Project Code"
-            >
-              <svg
-                role="img"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
+            {project.githubUrl && (
+              <Link
+                to={project.githubUrl}
+                className="h-8 w-8 p-0.5 hover:text-primary-400"
+                title="View Project Code"
               >
-                <title>GitHub</title>
-                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-              </svg>
-            </Link>
+                <svg
+                  role="img"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                >
+                  <title>GitHub</title>
+                  <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                </svg>
+              </Link>
+            )}
+
+            {project.projectUrl && (
+              <Link
+                to="/"
+                className="h-8 w-8 p-0.5 hover:text-primary-400"
+                title="View Live Project"
+              >
+                <Globe />
+              </Link>
+            )}
 
             <Link
-              to="/"
-              className="h-8 w-8 p-0.5 hover:text-primary-400"
-              title="View Live Project"
-            >
-              <Globe />
-            </Link>
-
-            <Link
-              to="/"
+              to={`/projects/${project.$id}`}
               className="h-8 w-8 p-0.5 hover:text-primary-400"
               title="Read More"
             >
@@ -78,15 +90,12 @@ function ProjectCard({ className, designType = "vert" }: ProjectCardProps) {
           designType === "horiz" ? "flex-1/2" : ""
         )}
       >
-        <h2 className="text-xl font-medium">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio,
-          maiores!
-        </h2>
+        <h2 className="text-xl font-medium">{project.title}</h2>
 
         <p className="text-md text-slate-300">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem est
-          fugiat consequatur quaerat ipsa tempora, deleniti, ex suscipit
-          molestias illo facere commodi officiis dolores.
+          {stripHTMLTags(project.content).length > 100
+            ? `${stripHTMLTags(project.content).slice(0, 100)}...`
+            : stripHTMLTags(project.content)}
         </p>
 
         <div className="flex gap-2">

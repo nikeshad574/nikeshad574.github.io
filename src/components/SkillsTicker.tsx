@@ -1,29 +1,14 @@
 import { useState } from "react";
 import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
+import type { SkillRowResp } from "../types/skill.types";
 
-interface ISkills {
-  name: string;
-  icon: string;
+interface SkillsTickerProps {
+  skills: SkillRowResp[];
 }
 
-const SkillsTicker = () => {
+const SkillsTicker = ({ skills }: SkillsTickerProps) => {
   const [isPaused, setIsPaused] = useState(false);
   const xTranslation = useMotionValue(0);
-
-  const skills: ISkills[] = [
-    { name: "HTML", icon: "🌐" },
-    { name: "CSS", icon: "🎨" },
-    { name: "JavaScript", icon: "⚡" },
-    { name: "React", icon: "⚛️" },
-    { name: "Node.js", icon: "🟢" },
-    { name: "MongoDB", icon: "🍃" },
-    { name: "TypeScript", icon: "📘" },
-    { name: "Tailwind", icon: "💨" },
-    { name: "Next.js", icon: "▲" },
-    { name: "Express", icon: "🚂" },
-    { name: "GraphQL", icon: "◈" },
-    { name: "Docker", icon: "🐳" },
-  ];
 
   const duplicatedSkills = [...skills, ...skills];
 
@@ -42,7 +27,7 @@ const SkillsTicker = () => {
     }
   });
 
-  const handleClick = (skill: ISkills) => {
+  const handleClick = (skill: SkillRowResp) => {
     alert(`You clicked on ${skill.name}!`);
   };
 
@@ -72,8 +57,8 @@ const SkillsTicker = () => {
             whileTap={{ scale: 0.95 }}
             onClick={() => handleClick(skill)}
           >
-            <div className="text-center">
-              <div className="text-5xl mb-3">{skill.icon}</div>
+            <div className="text-center flex flex-col items-center gap-0.5">
+              <img src={skill.imageURL} className="text-5xl h-16 w-16" alt="" />
               <h3 className="text-white text-md font-medium">{skill.name}</h3>
             </div>
 

@@ -1,6 +1,10 @@
 import { motion } from "motion/react";
 
-function AnimatedBlob() {
+interface AnimatedBlobProps {
+  imageSrc?: string;
+}
+
+function AnimatedBlob({ imageSrc }: AnimatedBlobProps) {
   const bobAnimationDValues = [
     "M62.9,-17.5C71.6,6.6,62.1,39.5,38.9,57.4C15.6,75.2,-21.5,77.9,-45.9,60.7C-70.3,43.6,-82.1,6.5,-72.3,-18.9C-62.6,-44.4,-31.3,-58.3,-2.1,-57.6C27,-56.9,54.1,-41.6,62.9,-17.5Z",
     "M56.4,-13.6C66.1,11.5,62.1,45.8,41.2,62.3C20.3,78.7,-17.5,77.4,-35.1,61.5C-52.8,45.6,-50.2,15,-41,-9.4C-31.8,-33.8,-15.9,-52.1,3.7,-53.3C23.3,-54.6,46.7,-38.7,56.4,-13.6Z",
@@ -30,7 +34,7 @@ function AnimatedBlob() {
       </defs>
 
       <image
-        href="me_photo.png"
+        href={imageSrc ? imageSrc : "me_photo.png"}
         width="100%"
         height="100%"
         clipPath="url(#blobClip)"

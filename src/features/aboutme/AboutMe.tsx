@@ -1,67 +1,11 @@
-import { Printer } from "lucide-react";
+import { Loader, Printer } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
+import useGetAboutme from "../../hooks/aboutme.hooks";
+import useGetSkills from "../../hooks/skill.hooks";
 
 function AboutMe() {
-  const aboutMeValues = {
-    name: "Nikesh Adhikari",
-    location: "Kathmandu, Nepal",
-    profession: "Full Stack Developer",
-    email: "nikeshad574@gmail.com",
-    github: "nikeshad574",
-    site: "https://nikeshad574.github.io",
-    linkedin: "nikeshad574",
-    professionalSummary:
-      "Full-Stack Developer with hands-on experience in building web applications using React, Node.js, Laravel, and WordPress. Skilled in backend and frontend development, API integration, and team collaboration. Successfully small teams to deliver projects on time. ",
-    coreSkills: [
-      "Team Leadership",
-      "Problem Solving",
-      "Project Management",
-      "Time Management",
-    ],
-    technicalSkills: [
-      "MySQL",
-      "MongoDB",
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "TypeScript",
-      "Express.js",
-      "React",
-      "Node.js",
-      "PHP",
-      "Laravel",
-      "WordPress",
-      "Rest API",
-    ],
-    additionalSkills: ["Java", ".NET", "Python", "AI Assisted Coding"],
-    professionalExperience: [
-      {
-        role: "Full Stack Developer",
-        company: "Softved Multipurpose Pvt. Ltd.",
-        duration: "Dec 2024 - Present",
-        location: "Kathmandu, Nepal",
-        responsibilites: [
-          "Lead a team of 4 developers to deliver a MERN-based e-commerce platform and several internal projects.",
-          "Developed and deployed a MERN appliction as part of team projects.",
-          "Built a customized website using WordPress for internal use.",
-          "Integrated REST APIs with MongoDB and MySQL backends, enabling real-time data synchronization.",
-          "Developed PHP and Laravel-based applications, implementing CRUD operations and REST APIs.",
-        ],
-      },
-    ],
-    education: [
-      {
-        degree: "Bachelor of Computer Application (BCA), IT",
-        institution: "Nist Highter Education",
-        year: "2025",
-      },
-      {
-        degree: "Higher Secondary Education (10+2), Science",
-        institution: "Nist Highter Education",
-        year: "2020",
-      },
-    ],
-  };
+  const { aboutMe, isLoading, error } = useGetAboutme();
+  const { skills, isLoading: isGettingSkills } = useGetSkills();
 
   const printableRef = useRef<HTMLDivElement>(null);
 
@@ -131,6 +75,29 @@ function AboutMe() {
     return () => {};
   }, []);
 
+  const aboutMeValues = aboutMe?.rows[0];
+
+  const parseMaybeJsonArray = (arr: any[] | undefined) => {
+    if (!arr) return [];
+    return arr.map((item) => {
+      if (typeof item === "string") {
+        try {
+          return JSON.parse(item);
+        } catch {
+          return item;
+        }
+      }
+      return item;
+    });
+  };
+
+  const professionalExperiences = parseMaybeJsonArray(
+    aboutMeValues?.professionalExperiences as any[] | undefined
+  );
+  const education = parseMaybeJsonArray(
+    aboutMeValues?.education as any[] | undefined
+  );
+
   return (
     <section className="container mb-6">
       <div className="flex items-center justify-between">
@@ -143,75 +110,101 @@ function AboutMe() {
         </button>
       </div>
 
-      <div
-        id="resume"
-        ref={printableRef}
-        className="border border-primary-100/40 rounded-md p-4 print:text-black"
-      >
-        <h1 className="text-3xl pb-2 mb-2 border-b-2 font-medium">
-          {aboutMeValues.name}
-        </h1>
-        <p className="text-md">
-          Email: {aboutMeValues.email} | Location: {aboutMeValues.location}
-        </p>
-        <p className="text-md">
-          Github: {aboutMeValues.github} | LinkedIn: {aboutMeValues.linkedin} |
-          Site: {aboutMeValues.site}
-        </p>
-
-        <div className="mt-4">
-          <h2 className="text-xl font-medium">Professional Summary</h2>
-
-          <p>{aboutMeValues.professionalSummary}</p>
+      {isLoading && (
+        <div className="border border-primary-100/40 rounded-md p-4 print:text-black">
+          <Loader className="h-6 w-6 animate-spin" />
         </div>
+      )}
 
-        <div className="mt-4">
-          <h2 className="text-xl font-medium">Skills</h2>
-
-          <ul className="ml-4 list-disc">
-            <li>Core Skills: {aboutMeValues.coreSkills.join(", ")}</li>
-            <li>
-              Technical Skills: {aboutMeValues.technicalSkills.join(", ")}
-            </li>
-            <li>
-              Additional Skills: {aboutMeValues.additionalSkills.join(", ")}
-            </li>
-          </ul>
+      {error && (
+        <div className="border border-primary-100/40 rounded-md p-4 print:text-black">
+          <p className="text-red-500">Failed, {error.message}</p>
         </div>
+      )}
 
-        <div className="mt-4">
-          <h2 className="text-xl font-medium mb-4">Professional Experience</h2>
+      {!isLoading && aboutMe && aboutMeValues && (
+        <div
+          id="resume"
+          ref={printableRef}
+          className="border border-primary-100/40 rounded-md p-4 print:text-black"
+        >
+          <h1 className="text-3xl pb-2 mb-2 border-b-2 font-medium">
+            {aboutMeValues.name}
+          </h1>
+          <p className="text-md">
+            Email: {aboutMeValues.email} | Location: {aboutMeValues.location}
+          </p>
+          <p className="text-md">
+            Github: {aboutMeValues.github} | LinkedIn: {aboutMeValues.linkedin}{" "}
+            | Site: {aboutMeValues.site}
+          </p>
 
-          {aboutMeValues.professionalExperience.map((pe, index) => (
-            <div key={`${index}-${pe.company}`} className="mb-4">
-              <h3 className="text-lg font-medium">
-                {pe.role} | {pe.company}
-              </h3>
-              <p className="mb-2">
-                {pe.location} | {pe.duration}
-              </p>
+          <div className="mt-4">
+            <h2 className="text-xl font-medium">Professional Summary</h2>
 
-              <ul className="list-disc ml-4">
-                {pe.responsibilites.map((res, idx) => (
-                  <li key={`${res}-${idx}`}>{res}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+            <p>{aboutMeValues.professionalSummary}</p>
+          </div>
 
-        <div className="mt-4">
-          <h2 className="text-xl font-medium">Education</h2>
+          <div className="mt-4">
+            <h2 className="text-xl font-medium">Skills</h2>
 
-          <ul className="list-disc ml-4">
-            {aboutMeValues.education.map((edu, idx) => (
-              <li key={`${idx}-${edu.institution}`}>
-                {edu.institution} | {edu.institution} | {edu.year}
+            <ul className="ml-4 list-disc">
+              <li>
+                <span className="font-medium mr-2">Core Skills:</span>
+                {aboutMeValues.coreSkills.join(", ")}
               </li>
+              <li>
+                <span className="font-medium mr-2">Technical Skills:</span>
+                {!isGettingSkills &&
+                  skills &&
+                  skills.rows.map((skill) => skill.name).join(", ")}
+                {isGettingSkills && (
+                  <Loader className="ml-2 inline-block animate-spin h-4 w-4" />
+                )}
+              </li>
+              <li>
+                <span className="font-medium mr-2">Additional Skills:</span>
+                {aboutMeValues.additionalSkills.join(", ")}
+              </li>
+            </ul>
+          </div>
+
+          <div className="mt-4">
+            <h2 className="text-xl font-medium mb-4">
+              Professional Experience
+            </h2>
+
+            {professionalExperiences.map((pe, index) => (
+              <div key={`${index}-${pe.company}`} className="mb-4">
+                <h3 className="text-lg font-medium">
+                  {pe.role} | {pe.company}
+                </h3>
+                <p className="mb-2">
+                  {pe.location} | {pe.duration}
+                </p>
+
+                <ul className="list-disc ml-4">
+                  {(pe.responsibilities as string[]).map((res, idx) => (
+                    <li key={`${res}-${idx}`}>{res}</li>
+                  ))}
+                </ul>
+              </div>
             ))}
-          </ul>
+          </div>
+
+          <div className="mt-4">
+            <h2 className="text-xl font-medium">Education</h2>
+
+            <ul className="list-disc ml-4">
+              {education.map((edu, idx) => (
+                <li key={`${idx}-${edu.institution}`}>
+                  {edu.institution} | {edu.institution} | {edu.year}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
