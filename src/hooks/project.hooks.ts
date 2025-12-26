@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { withAsyncErrorHandler } from "../utils/commonUtils";
 import { tablesDB } from "../conf/appwriteConfig";
 import conf from "../conf/conf";
@@ -45,6 +45,59 @@ export const useGetFeaturedProjects = () => {
   });
 
   return { featuredProjects, isLoading, error };
+};
+
+export const useGetInfiniteProjects = (skills: string[], limit = 3) => {
+  const {
+    data: projectsPages,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
+    error,
+  } = useInfiniteQuery({
+    queryKey: [...BASE_PROJECTS_KEY, "infinite", skills.toString()],
+    queryFn: withAsyncErrorHandler(async ({ pageParam = 1 }) => {
+      const projects = (await tablesDB.listRows({
+        databaseId: conf.appwrite.databaseId,
+        tableId: conf.appwrite.collections.projects,
+        queries: [
+          Query.offset(pageParam),
+          Query.limit(limit),
+          ...skills.map((skill) => Query.equal("skills", skill)),
+        ],
+      })) as ProjectListResponse;
+      return projects;
+    }),
+    initialPageParam: 0,
+    getNextPageParam: (
+      lastPage: ProjectListResponse,
+      _,
+      lastPageParam: number
+    ) => {
+      const totalItems = lastPage.total;
+      const loadedItems = lastPageParam * limit + lastPage.rows.length;
+      if (loadedItems >= totalItems) {
+        return undefined;
+      }
+      return lastPageParam + 1;
+    },
+    getPreviousPageParam: (_, __, firstPageParam: number) => {
+      if (firstPageParam <= 1) {
+        return undefined;
+      }
+      return firstPageParam - 1;
+    },
+  });
+
+  return {
+    projectsPages,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
+    error,
+  };
 };
 
 export const useGetAllProjects = () => {

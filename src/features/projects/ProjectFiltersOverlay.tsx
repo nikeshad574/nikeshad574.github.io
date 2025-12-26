@@ -4,11 +4,13 @@ import OverlayModal from "../../components/OverlayModal";
 interface ProjectFiltersOverlayProps {
   isOpen: boolean;
   onClose: () => void;
+  existingSkills: string[];
 }
 
 function ProjectFiltersOverlay({
   isOpen: showFilters,
   onClose,
+  existingSkills,
 }: ProjectFiltersOverlayProps) {
   return (
     <OverlayModal isOpen={showFilters} onClose={onClose}>
