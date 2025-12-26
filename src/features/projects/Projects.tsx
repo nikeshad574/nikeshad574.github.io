@@ -34,9 +34,12 @@ function Projects() {
   }, [inView]);
 
   const filterSkills =
-    skills?.rows.filter((skill) => skill.$id in paramSkills) || [];
+    skills?.rows.filter((skill) => paramSkills.includes(skill.$id)) || [];
+
+  console.log(filterSkills);
 
   const removeItemFromSkillFilter = (skillId: string) => {
+    if (!paramSkills.includes(skillId)) return;
     const updatedSkills = paramSkills.filter((id) => id !== skillId);
     if (updatedSkills.length <= 0) {
       searchParam.delete("skills");
@@ -45,6 +48,13 @@ function Projects() {
       searchParam.set("skills", updatedSkills.join(","));
       setSearchParam(searchParam);
     }
+  };
+
+  const addItemToSkillFilter = (skillId: string) => {
+    if (paramSkills.includes(skillId)) return;
+    const updatedSkills = Array.from(new Set([...paramSkills, skillId]));
+    searchParam.set("skills", updatedSkills.join(","));
+    setSearchParam(searchParam);
   };
 
   return (
@@ -80,13 +90,13 @@ function Projects() {
       </div>
 
       {isLoading && (
-        <div>
+        <div className="container">
           <Loader className="h-6 w-6 animate-spin" />
         </div>
       )}
 
       {!isLoading && error && (
-        <div className="text-red-500">
+        <div className="container text-red-500">
           <p>{error.message}</p>
         </div>
       )}
@@ -97,19 +107,23 @@ function Projects() {
           projectsPages &&
           projectsPages.pages.map((page) =>
             page.rows.map((project) => (
-              <ProjectCard key={project.$id} project={project} />
+              <ProjectCard
+                key={project.$id}
+                project={project}
+                addSkillFilter={addItemToSkillFilter}
+              />
             ))
           )}
       </div>
 
       {isFetchingNextPage && (
-        <div className="flex items-center justify-center p-2 gap-2">
+        <div className="container flex items-center justify-center p-2 gap-2">
           <Loader className="h-5 w-5 animate-spin" />
           <span className="text-slate-500">Getting More Tasks . . .</span>
         </div>
       )}
 
-      {!isFetchingNextPage && !hasNextPage && (
+      {!isFetchingNextPage && !isLoading && !hasNextPage && (
         <div className="flex items-center justify-center p-2 gap-2 text-slate-500">
           <p>* * That's All * *</p>
         </div>
@@ -125,6 +139,8 @@ function Projects() {
         isOpen={showFilters}
         onClose={() => setShowFilters(false)}
         existingSkills={paramSkills}
+        onChooseSkill={addItemToSkillFilter}
+        onRemoveChooseSkill={removeItemFromSkillFilter}
       />
     </section>
   );
