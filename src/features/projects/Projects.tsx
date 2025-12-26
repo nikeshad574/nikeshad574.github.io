@@ -1,10 +1,12 @@
-import { BadgeX, Filter } from "lucide-react";
+import { BadgeX, Filter, Loader } from "lucide-react";
 import ProjectCard from "../../components/ProjectCard";
 import { useState } from "react";
 import ProjectFiltersOverlay from "./ProjectFiltersOverlay";
+import { useGetAllProjects } from "../../hooks/project.hooks";
 
 function Projects() {
   const [showFilters, setShowFilters] = useState(false);
+  const { projects, isLoading, error } = useGetAllProjects();
 
   return (
     <section className="flex flex-col pb-10">
@@ -38,9 +40,23 @@ function Projects() {
 
       {/* Container for Project Cards */}
       <div className="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8 mb-6">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <ProjectCard key={index} />
-        ))}
+        {isLoading && (
+          <div>
+            <Loader className="h-6 w-6 animate-spin" />
+          </div>
+        )}
+
+        {!isLoading && error && (
+          <div className="text-red-500">
+            <p>{error.message}</p>
+          </div>
+        )}
+
+        {!isLoading &&
+          projects &&
+          projects.rows.map((project) => (
+            <ProjectCard key={project.$id} project={project} />
+          ))}
       </div>
 
       <button className="cursor-pointer mx-auto bg-primary hover:bg-primary-800 px-4 py-2 rounded-md">

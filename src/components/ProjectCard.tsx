@@ -90,12 +90,12 @@ function ProjectCard({
           designType === "horiz" ? "flex-1/2" : ""
         )}
       >
-        <h2 className="text-xl font-medium">{project.title}</h2>
+        <h2 className="text-xl font-medium two-line-ellipsis">
+          {project.title.slice(0, 150)}
+        </h2>
 
-        <p className="text-md text-slate-300">
-          {stripHTMLTags(project.content).length > 100
-            ? `${stripHTMLTags(project.content).slice(0, 100)}...`
-            : stripHTMLTags(project.content)}
+        <p className={"text-md text-slate-300 four-line-ellipsis"}>
+          {stripHTMLTags(project.content).slice(0, 200)}
         </p>
 
         <div className="flex gap-2">

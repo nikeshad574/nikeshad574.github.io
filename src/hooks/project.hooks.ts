@@ -46,3 +46,24 @@ export const useGetFeaturedProjects = () => {
 
   return { featuredProjects, isLoading, error };
 };
+
+export const useGetAllProjects = () => {
+  const {
+    data: projects,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: [...BASE_PROJECTS_KEY, "all"],
+    queryFn: withAsyncErrorHandler(async () => {
+      const allProjects = (await tablesDB.listRows({
+        databaseId: conf.appwrite.databaseId,
+        tableId: conf.appwrite.collections.projects,
+        queries: [Query.orderDesc("$createdAt")],
+      })) as ProjectListResponse;
+
+      return allProjects;
+    }),
+  });
+
+  return { projects, isLoading, error };
+};

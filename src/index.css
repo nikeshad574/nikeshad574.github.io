@@ -111,4 +111,25 @@
   .htmlContent h6 {
     @apply text-lg;
   }
+
+  .two-line-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .four-line-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* number of lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .five-line-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 5; /* number of lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
