@@ -3,9 +3,33 @@ import { withAsyncErrorHandler } from "../utils/commonUtils";
 import { tablesDB } from "../conf/appwriteConfig";
 import conf from "../conf/conf";
 import { Query } from "appwrite";
-import type { ProjectListResponse } from "../types/project.type";
+import type {
+  ProjectListResponse,
+  ProjectRowResp,
+} from "../types/project.type";
 
 const BASE_PROJECTS_KEY = ["projects"];
+
+export const useGetSingleProject = (projectId: string) => {
+  const {
+    data: project,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: [...BASE_PROJECTS_KEY, projectId],
+    queryFn: withAsyncErrorHandler(async () => {
+      const project = (await tablesDB.getRow({
+        databaseId: conf.appwrite.databaseId,
+        tableId: conf.appwrite.collections.projects,
+        rowId: projectId,
+      })) as ProjectRowResp;
+
+      return project;
+    }),
+  });
+
+  return { project, isLoading, error };
+};
 
 export const useGetFeaturedProjects = () => {
   const limit = 3;
@@ -119,4 +143,59 @@ export const useGetAllProjects = () => {
   });
 
   return { projects, isLoading, error };
+};
+
+export const useGetSimilarProject = (
+  skills: string[],
+  excludeProjectId: string,
+  limit: number
+) => {
+  const {
+    data: similarProjects,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: [
+      ...BASE_PROJECTS_KEY,
+      skills?.toString(),
+      excludeProjectId,
+      limit,
+    ],
+
+    queryFn: withAsyncErrorHandler(async () => {
+      const fetchedProjects: ProjectRowResp[] = [];
+
+      const similarProjects = (await tablesDB.listRows({
+        databaseId: conf.appwrite.databaseId,
+        tableId: conf.appwrite.collections.projects,
+        queries: [
+          Query.notEqual("$id", excludeProjectId),
+          Query.limit(limit),
+          Query.orderAsc("$createdAt"),
+          Query.equal("skills", skills),
+        ],
+      })) as ProjectListResponse;
+      fetchedProjects.push(...similarProjects.rows);
+
+      const nextLimit = limit - similarProjects.rows.length;
+      if (nextLimit > 0) {
+        const notToFetchIds = similarProjects.rows.map((p) => p.$id);
+        const additionalProjects = (await tablesDB.listRows({
+          databaseId: conf.appwrite.databaseId,
+          tableId: conf.appwrite.collections.projects,
+          queries: [
+            Query.notEqual("$id", excludeProjectId),
+            ...notToFetchIds.map((id) => Query.notEqual("$id", id)),
+            Query.limit(nextLimit),
+            Query.orderDesc("$createdAt"),
+          ],
+        })) as ProjectListResponse;
+        fetchedProjects.push(...additionalProjects.rows);
+      }
+      return fetchedProjects;
+    }),
+    enabled: skills !== undefined && excludeProjectId !== undefined,
+  });
+
+  return { similarProjects, isLoading, error };
 };

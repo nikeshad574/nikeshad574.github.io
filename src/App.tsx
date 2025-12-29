@@ -26,10 +26,7 @@ function App() {
             <Route path="/" element={<BaseLayout />}>
               <Route index element={<P.Home />} />
               <Route path="projects" element={<P.Projects />} />
-              <Route
-                path="projects/:project_slug"
-                element={<P.SingleProject />}
-              />
+              <Route path="projects/:projectId" element={<P.SingleProject />} />
               <Route path="experiences" element={<P.Experiences />} />
               <Route path="about" element={<P.AboutMe />} />
               <Route path="contact" element={<P.Contact />} />
