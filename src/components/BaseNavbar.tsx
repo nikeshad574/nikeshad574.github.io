@@ -2,7 +2,7 @@ import { Link, NavLink } from "react-router";
 import Logo from "./Logo";
 import { ExternalLink } from "lucide-react";
 import BaseMobileNav from "./BaseMobileNav";
-import { NAVBAR_CONST } from "../conf/constants";
+import { BLOG_CONST, NAVBAR_CONST } from "../conf/constants";
 
 function BaseNavbar() {
   return (
@@ -30,12 +30,15 @@ function BaseNavbar() {
 
       <div className="hidden md:flex h-full gap-4">
         <Link
-          to="/external"
+          to={BLOG_CONST.url}
+          target="_blank"
+          title={BLOG_CONST.siteTitle}
           className="flex gap-2 items-center justify-center px-2 rounded-sm font-medium"
         >
           Blogs
           <ExternalLink className="h-3 w-3 text-primary-500" />
         </Link>
+
         <NavLink
           to="/contact"
           className="bg-primary flex items-center justify-center px-4 rounded-sm font-medium"

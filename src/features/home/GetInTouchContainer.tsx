@@ -1,13 +1,11 @@
 import { Loader, Mail } from "lucide-react";
-import GlowingButton from "../../components/GlowingButton";
 import useGetAboutme from "../../hooks/aboutme.hooks";
-import { handleAppwriteError } from "../../utils/commonUtils";
+import WorkingForm from "./WorkingForm";
 
 function GetInTouchContainer() {
   const { aboutMe, isLoading, error } = useGetAboutme();
 
   const aboutMeValues = aboutMe?.rows[0];
-
   const rawSocials = aboutMeValues?.socials;
   const socials =
     typeof rawSocials === "string"
@@ -156,7 +154,7 @@ function GetInTouchContainer() {
                       cy="7"
                       r="1.5"
                       fill="currentColor"
-                      fill-opacity="0"
+                      fillOpacity="0"
                     >
                       <animate
                         fill="freeze"
@@ -169,13 +167,13 @@ function GetInTouchContainer() {
                     <g
                       fill="none"
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                     >
                       <path
-                        stroke-dasharray="72"
-                        stroke-dashoffset="72"
+                        strokeDasharray="72"
+                        strokeDashoffset="72"
                         d="M16 3c2.76 0 5 2.24 5 5v8c0 2.76 -2.24 5 -5 5h-8c-2.76 0 -5 -2.24 -5 -5v-8c0 -2.76 2.24 -5 5 -5h4Z"
                       >
                         <animate
@@ -186,8 +184,8 @@ function GetInTouchContainer() {
                         />
                       </path>
                       <path
-                        stroke-dasharray="28"
-                        stroke-dashoffset="28"
+                        strokeDasharray="28"
+                        strokeDashoffset="28"
                         d="M12 8c2.21 0 4 1.79 4 4c0 2.21 -1.79 4 -4 4c-2.21 0 -4 -1.79 -4 -4c0 -2.21 1.79 -4 4 -4"
                       >
                         <animate
@@ -205,47 +203,7 @@ function GetInTouchContainer() {
             </div>
           </div>
 
-          <form className="flex-1/2 flex flex-col gap-4 p-4">
-            <div className="flex flex-col gap-1">
-              <label htmlFor="name" className="font-medium">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                className="outline focus:outline-primary-400 rounded-md px-2 py-1"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label htmlFor="email" className="font-medium">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                className="outline focus:outline-primary-400 rounded-md px-2 py-1"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label htmlFor="message" className="font-medium">
-                Message
-              </label>
-              <textarea
-                id="message"
-                className="outline focus:outline-primary-400 rounded-md px-2 py-1 h-32 resize-none"
-              />
-            </div>
-
-            <div className="flex justify-end">
-              <GlowingButton
-                onClick={() => console.log("clicked")}
-                className="w-fit px-6 py-2 font-medium text-md "
-              >
-                Get In Touch
-              </GlowingButton>
-            </div>
-          </form>
+          <WorkingForm />
         </div>
       )}
     </section>

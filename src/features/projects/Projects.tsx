@@ -36,8 +36,6 @@ function Projects() {
   const filterSkills =
     skills?.rows.filter((skill) => paramSkills.includes(skill.$id)) || [];
 
-  console.log(filterSkills);
-
   const removeItemFromSkillFilter = (skillId: string) => {
     if (!paramSkills.includes(skillId)) return;
     const updatedSkills = paramSkills.filter((id) => id !== skillId);

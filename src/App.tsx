@@ -5,6 +5,7 @@ import BaseLayout from "./layout/BaseLayout";
 import SuspenseFallBack from "./components/SuspenseFallBack";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const queryClient = new QueryClient({
@@ -19,6 +20,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <Toaster position="top-left" />
       <ReactQueryDevtools initialIsOpen={false} />
       <Suspense fallback={<SuspenseFallBack />}>
         <BrowserRouter>

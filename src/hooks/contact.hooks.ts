@@ -1,0 +1,41 @@
+import emailJs from "@emailjs/browser";
+import conf from "../conf/conf";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+
+interface ContactEmailTemplateParams {
+  name: string;
+  email: string;
+  message: string;
+}
+
+export const useSendEmail = () => {
+  const {
+    mutate: sendEmail,
+    isPending,
+    isSuccess,
+  } = useMutation({
+    mutationFn: async (templateParams: ContactEmailTemplateParams) => {
+      const resp = await emailJs.send(
+        conf.emailJs.serviceId,
+        conf.emailJs.templateId,
+        templateParams as any,
+        {
+          publicKey: conf.emailJs.publicKey,
+        }
+      );
+
+      if (resp.status !== 200) {
+        throw new Error(resp.text);
+      }
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+    onSuccess: () => {
+      toast.success("Email sent successfully!");
+    },
+  });
+
+  return { sendEmail, isPending, isSuccess };
+};

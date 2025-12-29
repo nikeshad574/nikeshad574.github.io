@@ -1,7 +1,7 @@
 import { Loader, Printer } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
 import useGetAboutme from "../../hooks/aboutme.hooks";
-import useGetSkills from "../../hooks/skill.hooks";
+import { useGetSkills } from "../../hooks/skill.hooks";
 
 function AboutMe() {
   const { aboutMe, isLoading, error } = useGetAboutme();
