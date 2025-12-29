@@ -119,7 +119,7 @@ function Projects() {
       {isFetchingNextPage && (
         <div className="container flex items-center justify-center p-2 gap-2">
           <Loader className="h-5 w-5 animate-spin" />
-          <span className="text-slate-500">Getting More Tasks . . .</span>
+          <span className="text-slate-500">Getting More Projects . . .</span>
         </div>
       )}
 
