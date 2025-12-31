@@ -9,10 +9,10 @@ import GetInTouchContainer from "./GetInTouchContainer";
 import useGetAboutme from "../../hooks/aboutme.hooks";
 import { useGetSkills } from "../../hooks/skill.hooks";
 import { useGetFeaturedProjects } from "../../hooks/project.hooks";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 function Home() {
-  const { aboutMe, isLoading: isGettingAboutme } = useGetAboutme();
+  const { aboutMe } = useGetAboutme();
   const { skills, isLoading: isGettingSkills } = useGetSkills();
   const { featuredProjects, isLoading: isGettingFeaturedProjects } =
     useGetFeaturedProjects();
@@ -62,13 +62,15 @@ function Home() {
               : "A full stack developer crafting clean, functional, and creative digital experiences."}
           </p>
 
-          <motion.button
-            initial={{ scale: 1 }}
-            whileHover={{ scale: 1.05 }}
-            className="cursor-pointer hover:bg-primary-600 bg-primary w-fit font-medium px-4 py-2 rounded-md"
-          >
-            Get In Touch
-          </motion.button>
+          <Link to="/contact">
+            <motion.button
+              initial={{ scale: 1 }}
+              whileHover={{ scale: 1.05 }}
+              className="cursor-pointer hover:bg-primary-600 bg-primary w-fit font-medium px-4 py-2 rounded-md"
+            >
+              Get In Touch
+            </motion.button>
+          </Link>
         </div>
 
         <div className="sm:w-xl h-96 sm:h-full flex items-center justify-center relative">
@@ -102,16 +104,19 @@ function Home() {
                 className="md:row-span-2"
                 designType={innerW < 768 && innerW > 640 ? "horiz" : "vert"}
                 project={featuredProjects[0]}
+                addSkillFilter={() => {}}
               />
               <ProjectCard
                 className="md:col-span-2 "
                 designType={innerW > 640 ? "horiz" : "vert"}
                 project={featuredProjects[1]}
+                addSkillFilter={() => {}}
               />
               <ProjectCard
                 className="md:col-span-2 md:col-start-2 md:row-start-2"
                 designType={innerW > 640 ? "horiz" : "vert"}
                 project={featuredProjects[2]}
+                addSkillFilter={() => {}}
               />
             </div>
 
