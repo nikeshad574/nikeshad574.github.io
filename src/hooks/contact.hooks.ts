@@ -2,6 +2,8 @@ import emailJs from "@emailjs/browser";
 import conf from "../conf/conf";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { tablesDB } from "../conf/appwriteConfig";
+import { ID } from "appwrite";
 
 interface ContactEmailTemplateParams {
   name: string;
@@ -16,6 +18,13 @@ export const useSendEmail = () => {
     isSuccess,
   } = useMutation({
     mutationFn: async (templateParams: ContactEmailTemplateParams) => {
+      await tablesDB.createRow({
+        databaseId: conf.appwrite.databaseId,
+        tableId: conf.appwrite.collections.contact,
+        rowId: ID.unique(),
+        data: templateParams,
+      });
+
       const resp = await emailJs.send(
         conf.emailJs.serviceId,
         conf.emailJs.templateId,
