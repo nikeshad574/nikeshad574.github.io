@@ -11,6 +11,7 @@ interface ProjectCardProps {
   designType?: "vert" | "horiz";
   project: ProjectRowResp;
   addSkillFilter: (skillId: string) => void;
+  index?: number;
 }
 
 function ProjectCard({
@@ -18,6 +19,7 @@ function ProjectCard({
   designType = "vert",
   project,
   addSkillFilter,
+  index = 0,
 }: ProjectCardProps) {
   const { skills } = useGetSkills();
 
@@ -27,8 +29,14 @@ function ProjectCard({
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      whileInView={{ opacity: 1, y: 0 }}
+      key={project.$id}
+      exit={{ opacity: 1, y: 0, transition: { duration: 0.3 } }}
+      transition={{
+        delay: ((index % 3) + 1) * 0.2,
+        duration: 0.3,
+        ease: "easeOut",
+      }}
       whileHover={{
         scale: 1.03,
         boxShadow: "0 10px 10px rgba(255,255,255,0.1)",

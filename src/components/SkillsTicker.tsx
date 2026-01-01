@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
 import type { SkillRowResp } from "../types/skill.types";
+import { useNavigate } from "react-router";
 
 interface SkillsTickerProps {
   skills: SkillRowResp[];
@@ -9,6 +10,7 @@ interface SkillsTickerProps {
 const SkillsTicker = ({ skills }: SkillsTickerProps) => {
   const [isPaused, setIsPaused] = useState(false);
   const xTranslation = useMotionValue(0);
+  const navigate = useNavigate();
 
   const duplicatedSkills = [...skills, ...skills];
 
@@ -28,7 +30,7 @@ const SkillsTicker = ({ skills }: SkillsTickerProps) => {
   });
 
   const handleClick = (skill: SkillRowResp) => {
-    alert(`You clicked on ${skill.name}!`);
+    navigate(`/projects?skills=${encodeURIComponent(skill.$id)}`);
   };
 
   return (
@@ -58,7 +60,11 @@ const SkillsTicker = ({ skills }: SkillsTickerProps) => {
             onClick={() => handleClick(skill)}
           >
             <div className="text-center flex flex-col items-center gap-0.5">
-              <img src={skill.imageURL} className="text-5xl h-16 w-16" alt="" />
+              <img
+                src={skill.imageURL}
+                className="text-5xl h-16 w-16 rounded-md"
+                alt=""
+              />
               <h3 className="text-white text-md font-medium">{skill.name}</h3>
             </div>
 

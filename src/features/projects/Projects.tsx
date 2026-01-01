@@ -7,6 +7,7 @@ import { useGetInfiniteProjects } from "../../hooks/project.hooks";
 import { useInView } from "react-intersection-observer";
 import { useSearchParams } from "react-router";
 import { useGetSkills } from "../../hooks/skill.hooks";
+import { AnimatePresence } from "motion/react";
 
 const limit = 6;
 
@@ -101,17 +102,20 @@ function Projects() {
 
       {/* Container for Project Cards */}
       <div className="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8 mb-6">
-        {!isLoading &&
-          projectsPages &&
-          projectsPages.pages.map((page) =>
-            page.rows.map((project) => (
-              <ProjectCard
-                key={project.$id}
-                project={project}
-                addSkillFilter={addItemToSkillFilter}
-              />
-            ))
-          )}
+        <AnimatePresence>
+          {!isLoading &&
+            projectsPages &&
+            projectsPages.pages.map((page) =>
+              page.rows.map((project, index) => (
+                <ProjectCard
+                  key={project.$id}
+                  project={project}
+                  addSkillFilter={addItemToSkillFilter}
+                  index={index}
+                />
+              ))
+            )}
+        </AnimatePresence>
       </div>
 
       {isFetchingNextPage && (

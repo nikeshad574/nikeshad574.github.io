@@ -44,7 +44,11 @@ export const useGetFeaturedProjects = () => {
       const featuredProjects = (await tablesDB.listRows({
         databaseId: conf.appwrite.databaseId,
         tableId: conf.appwrite.collections.projects,
-        queries: [Query.equal("isFeatured", true), Query.limit(limit)],
+        queries: [
+          Query.equal("isFeatured", true),
+          Query.orderDesc("$createdAt"),
+          Query.limit(limit),
+        ],
       })) as ProjectListResponse;
 
       const resultRows = featuredProjects.rows;
@@ -56,8 +60,8 @@ export const useGetFeaturedProjects = () => {
           tableId: conf.appwrite.collections.projects,
           queries: [
             Query.equal("isFeatured", false),
-            Query.limit(remainingSlots),
             Query.orderDesc("$createdAt"),
+            Query.limit(remainingSlots),
           ],
         })) as ProjectListResponse;
 
@@ -88,6 +92,7 @@ export const useGetInfiniteProjects = (skills: string[], limit = 3) => {
         queries: [
           Query.offset(pageParam),
           Query.limit(limit),
+          Query.orderDesc("$createdAt"),
           ...skills.map((skill) => Query.equal("skills", skill)),
         ],
       })) as ProjectListResponse;

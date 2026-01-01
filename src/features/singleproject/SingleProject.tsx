@@ -101,7 +101,7 @@ function SingleProject() {
         </div>
 
         <div
-          className="htmlContent flex flex-col gap-2 mt-4"
+          className="htmlContent flex flex-col my-4"
           dangerouslySetInnerHTML={{
             __html: project.content,
           }}

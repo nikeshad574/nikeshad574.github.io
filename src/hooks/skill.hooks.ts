@@ -4,6 +4,7 @@ import { tablesDB } from "../conf/appwriteConfig";
 import conf from "../conf/conf";
 import type { SkillListResponse } from "../types/skill.types";
 import { searchQueryFromString } from "../utils/searchParamToQuery";
+import { Query } from "appwrite";
 
 const BASE_SKILLS_KEY = ["skills"];
 
@@ -18,6 +19,7 @@ export const useGetSkills = () => {
       const res = (await tablesDB.listRows({
         databaseId: conf.appwrite.databaseId,
         tableId: conf.appwrite.collections.skills,
+        queries: [Query.orderDesc("$createdAt")],
       })) as SkillListResponse;
       return res;
     }),
@@ -37,7 +39,10 @@ export const useGetSearchSkills = (searchTxt: string) => {
       const res = (await tablesDB.listRows({
         databaseId: conf.appwrite.databaseId,
         tableId: conf.appwrite.collections.skills,
-        queries: searchQueryFromString(searchTxt, ["name"]),
+        queries: [
+          ...searchQueryFromString(searchTxt, ["name"]),
+          Query.orderDesc("$createdAt"),
+        ],
       })) as SkillListResponse;
       return res;
     }),
