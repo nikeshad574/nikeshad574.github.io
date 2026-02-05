@@ -113,7 +113,7 @@ function Projects() {
                   addSkillFilter={addItemToSkillFilter}
                   index={index}
                 />
-              ))
+              )),
             )}
         </AnimatePresence>
       </div>
@@ -125,11 +125,26 @@ function Projects() {
         </div>
       )}
 
-      {!isFetchingNextPage && !isLoading && !hasNextPage && (
-        <div className="flex items-center justify-center p-2 gap-2 text-slate-500">
-          <p>* * That's All * *</p>
-        </div>
-      )}
+      {!isLoading &&
+        !isFetchingNextPage &&
+        projectsPages &&
+        projectsPages.pages &&
+        projectsPages.pages[0].total <= 0 && (
+          <div className="flex items-center justify-center p-2 gap-2 text-slate-500">
+            <p>* * No Projects Found * *</p>
+          </div>
+        )}
+
+      {!isFetchingNextPage &&
+        !isLoading &&
+        !hasNextPage &&
+        projectsPages &&
+        projectsPages.pages &&
+        projectsPages.pages[0].total > 0 && (
+          <div className="flex items-center justify-center p-2 gap-2 text-slate-500">
+            <p>* * That's All * *</p>
+          </div>
+        )}
 
       {hasNextPage && (
         <div ref={ref} className="opacity-0">
