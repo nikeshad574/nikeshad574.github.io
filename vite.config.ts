@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: "/nikeshad574.github.io/", // Replace with your actual repository name
+  base: "/", // Root path for username.github.io repository
   build: {
     outDir: "dist",
     sourcemap: false,
