@@ -1,4 +1,4 @@
-import { Cross, ExternalLink, Menu, X } from "lucide-react";
+import { ExternalLink, Menu, X } from "lucide-react";
 import { useState } from "react";
 import Logo from "./Logo";
 import cns from "../utils/classNames";
@@ -20,7 +20,7 @@ function BaseMobileNav() {
         initial={{ left: "-100%" }}
         animate={{ left: isNavOpen ? "0%" : "-100%" }}
         className={cns(
-          "flex flex-col transition duration-200 top-0 left-0 bottom-0 w-screen fixed bg-slate-800/30 backdrop-blur-[2px] z-40"
+          "flex flex-col transition duration-200 top-0 left-0 bottom-0 w-screen fixed bg-slate-800/30 backdrop-blur-[2px] z-40",
         )}
       >
         <div className="absolute top-0 left-0 bg-primary-900 w-full max-w-sm h-full ">
