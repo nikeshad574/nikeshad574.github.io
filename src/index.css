@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+@theme {
+  --primary-hsl: 245, 38%;
+  --color-primary: hsl(var(--primary-hsl), 35%);
+
+  --color-primary-50: hsl(var(--primary-hsl), 95%);
+  --color-primary-100: hsl(var(--primary-hsl), 90%);
+  --color-primary-200: hsl(var(--primary-hsl), 80%);
+  --color-primary-300: hsl(var(--primary-hsl), 70%);
+  --color-primary-400: hsl(var(--primary-hsl), 60%);
+  --color-primary-500: hsl(var(--primary-hsl), 50%);
+  --color-primary-600: hsl(var(--primary-hsl), 40%);
+  --color-primary-700: hsl(var(--primary-hsl), 30%);
+  --color-primary-800: hsl(var(--primary-hsl), 20%);
+  --color-primary-900: hsl(var(--primary-hsl), 10%);
+  --color-primary-950: hsl(var(--primary-hsl), 5%);
+
+  --color-background: hsl(247, 29%, 6%);
+}
+
+@layer {
+  body {
+    background: linear-gradient(180deg, hsl(247, 29%, 6%), hsl(247, 29%, 15%))
+      no-repeat;
+    color: hsl(248, 19%, 92%);
+    min-height: calc(100svh - theme(height.14));
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply max-w-6xl mx-auto p-2;
+  }
+
+  .nav-height {
+    @apply h-14;
+  }
+
+  .margin-nav-height {
+    margin-top: theme(height.14);
+  }
+
+  @media (min-width: 40rem) {
+    .h-full-minus-nav {
+      height: calc(100svh - theme(height.14));
+    }
+  }
+
+  .htmlContent ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+  }
+
+  .htmlContent ol {
+    list-style: decimal;
+    padding-left: 1.5rem;
+  }
+
+  .htmlContent img {
+    aspect-ratio: theme(--aspect-video);
+    object-fit: cover;
+    border-radius: 1rem;
+  }
+
+  .htmlContent table {
+    @apply border-collapse;
+  }
+
+  .htmlContent th,
+  .htmlContent td {
+    @apply border border-gray-400 px-4 py-2;
+  }
+
+  .htmlContent pre {
+    @apply bg-gray-800 p-4 rounded-lg overflow-x-auto;
+  }
+
+  .htmlContent code {
+    @apply bg-gray-700 px-1 rounded;
+  }
+
+  .htmlContent blockquote {
+    @apply border-l-4 border-gray-500 pl-4 italic text-gray-300;
+  }
+
+  .htmlContent a {
+    @apply text-blue-400 underline;
+  }
+
+  .htmlContent h1,
+  .htmlContent h2,
+  .htmlContent h3,
+  .htmlContent h4,
+  .htmlContent h5,
+  .htmlContent h6 {
+    @apply font-semibold;
+  }
+
+  .htmlContent h1 {
+    @apply text-2xl;
+  }
+
+  .htmlContent h2 {
+    @apply text-xl;
+  }
+
+  .htmlContent h3,
+  .htmlContent h4,
+  .htmlContent h5,
+  .htmlContent h6 {
+    @apply text-lg;
+  }
+
+  .two-line-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .four-line-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* number of lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .five-line-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 5; /* number of lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
