@@ -90,7 +90,7 @@ export const useGetInfiniteProjects = (skills: string[], limit = 3) => {
         databaseId: conf.appwrite.databaseId,
         tableId: conf.appwrite.collections.projects,
         queries: [
-          Query.offset(pageParam),
+          Query.offset(pageParam * limit),
           Query.limit(limit),
           Query.orderDesc("$createdAt"),
           ...skills.map((skill) => Query.equal("skills", skill)),
@@ -102,7 +102,7 @@ export const useGetInfiniteProjects = (skills: string[], limit = 3) => {
     getNextPageParam: (
       lastPage: ProjectListResponse,
       _,
-      lastPageParam: number
+      lastPageParam: number,
     ) => {
       const totalItems = lastPage.total;
       const loadedItems = lastPageParam * limit + lastPage.rows.length;
@@ -153,7 +153,7 @@ export const useGetAllProjects = () => {
 export const useGetSimilarProject = (
   skills: string[],
   excludeProjectId: string,
-  limit: number
+  limit: number,
 ) => {
   const {
     data: similarProjects,

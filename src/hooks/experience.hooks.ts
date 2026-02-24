@@ -22,7 +22,7 @@ export const useGetInfiniteExperiences = (limit: number = 3) => {
         databaseId: conf.appwrite.databaseId,
         tableId: conf.appwrite.collections.experience,
         queries: [
-          Query.offset(pageParam),
+          Query.offset(pageParam * limit),
           Query.limit(limit),
           Query.orderDesc("orderByYear"),
         ],
@@ -33,7 +33,7 @@ export const useGetInfiniteExperiences = (limit: number = 3) => {
     getNextPageParam: (
       lastPage: ExperienceListResponse,
       _,
-      lastPageParam: number
+      lastPageParam: number,
     ) => {
       const totalItems = lastPage.total;
       const loadedItems = lastPageParam * limit + lastPage.rows.length;
