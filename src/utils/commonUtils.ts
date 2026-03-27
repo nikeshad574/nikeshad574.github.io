@@ -1,41 +1,38 @@
-import { AppwriteException } from "appwrite";
+import axios from "axios";
 
-export const handleAppwriteError = (error: unknown) => {
-  if (error instanceof AppwriteException) {
-    return error.message;
+export default function handleAxiosError(
+  err: unknown,
+  defaultMsg: string = "Something went wrong!",
+) {
+  if (axios.isAxiosError(err) && err.response) {
+    return err.response.data.message || err.message || defaultMsg;
+  } else {
+    return "Error:" + err;
   }
-
-  if (
-    typeof error === "object" &&
-    error !== null &&
-    "name" in error &&
-    "message" in error
-  ) {
-    const err = error as { name: string; message: string };
-    return err.message;
-  }
-
-  return "An unexpected error occured. Please try again later.";
-};
-
-export default function cns(...classes: (string | false | null | undefined)[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
-export function withAsyncErrorHandler<
-  T extends (...args: any[]) => Promise<any>
->(fn: T): (...args: Parameters<T>) => Promise<Awaited<ReturnType<T>>> {
-  return async (...args: Parameters<T>) => {
-    try {
-      return await fn(...args);
-    } catch (error) {
-      throw new Error(handleAppwriteError(error));
-    }
-  };
 }
 
 export function stripHTMLTags(html: string): string {
   const tmp = document.createElement("DIV");
   tmp.innerHTML = html;
   return tmp.textContent || tmp.innerText || "";
+}
+
+export function getDateTimeFormat(dateTime: string) {
+  const date = new Date(dateTime);
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  };
+  const formattedDate = date.toLocaleDateString("en-CA", options);
+  const formattedTime = date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
+
+  const string = formattedDate + " " + formattedTime;
+
+  return { date: formattedDate, time: formattedTime, string };
 }

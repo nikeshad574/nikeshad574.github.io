@@ -1,50 +1,52 @@
-import emailJs from "@emailjs/browser";
-import conf from "../conf/conf";
-import { useMutation } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import { tablesDB } from "../conf/appwriteConfig";
-import { ID } from "appwrite";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { apiGetAllContacts } from "../services/apiContact";
 
-interface ContactEmailTemplateParams {
-  name: string;
-  email: string;
-  message: string;
-}
+export const contactQueryKeys = {
+  base: "contact",
+};
 
-export const useSendEmail = () => {
+export const useGetAllContact = (query: string) => {
   const {
-    mutate: sendEmail,
-    isPending,
-    isSuccess,
-  } = useMutation({
-    mutationFn: async (templateParams: ContactEmailTemplateParams) => {
-      await tablesDB.createRow({
-        databaseId: conf.appwrite.databaseId,
-        tableId: conf.appwrite.collections.contact,
-        rowId: ID.unique(),
-        data: templateParams,
-      });
-
-      const resp = await emailJs.send(
-        conf.emailJs.serviceId,
-        conf.emailJs.templateId,
-        templateParams as any,
-        {
-          publicKey: conf.emailJs.publicKey,
-        }
-      );
-
-      if (resp.status !== 200) {
-        throw new Error(resp.text);
-      }
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-    onSuccess: () => {
-      toast.success("Email sent successfully!");
-    },
+    data: contacts,
+    isLoading: isGettingContacts,
+    error: errorGettingContact,
+  } = useQuery({
+    queryKey: [contactQueryKeys.base, query],
+    queryFn: () => apiGetAllContacts(query),
   });
 
-  return { sendEmail, isPending, isSuccess };
+  return {
+    contacts,
+    isGettingContacts,
+    errorGettingContact,
+  };
+};
+
+export const useGetAllInfiniteContact = (query: string) => {
+  const {
+    data: contactPages,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: [contactQueryKeys.base, "inf", query],
+    queryFn: ({ pageParam }) => apiGetAllContacts(`page=${pageParam}&${query}`),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, _) => {
+      const nextPage = lastPage.pagination.has_more_pages
+        ? lastPage.pagination.current_page + 1
+        : undefined;
+      return nextPage;
+    },
+  });
+  return {
+    contactPages,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  };
 };

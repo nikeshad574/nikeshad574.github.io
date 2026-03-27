@@ -1,7 +1,6 @@
 import type { Key } from "react";
 
-export interface IAboutMe {
-  id: Key;
+export interface IAboutMeInput {
   name: string;
   location: string;
   profession: string;
@@ -29,6 +28,10 @@ export interface IAboutMe {
   homeProfessions: string[];
   homeShortBio: string;
   photoImageURL: string;
+}
+
+export interface IAboutMe extends IAboutMeInput {
+  id: Key;
   created_at: string;
   updated_at: string;
 }
