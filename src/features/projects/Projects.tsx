@@ -2,11 +2,11 @@ import { BadgeX, Filter, Loader } from "lucide-react";
 import ProjectCard from "../../components/ProjectCard";
 import { useEffect, useState } from "react";
 import ProjectFiltersOverlay from "./ProjectFiltersOverlay";
-import { useGetInfiniteProjects } from "../../hooks/project.hooks";
+import { useGetAllInfiniteProject } from "../../hooks/project.hooks";
 // import { useInView } from "motion/react";
 import { useInView } from "react-intersection-observer";
 import { useSearchParams } from "react-router";
-import { useGetSkills } from "../../hooks/skill.hooks";
+import { useGetAllInfiniteSkill } from "../../hooks/skill.hooks";
 import { AnimatePresence } from "motion/react";
 
 const limit = 6;
@@ -15,27 +15,45 @@ function Projects() {
   const [showFilters, setShowFilters] = useState(false);
   const [searchParam, setSearchParam] = useSearchParams();
   const { ref, inView } = useInView();
-  const { skills, isLoading: isGettingSkills } = useGetSkills();
 
   const paramSkills =
     searchParam.get("skills")?.split(",").filter(Boolean) || [];
+
+  const getProjectQuery = () => {
+    const params = new URLSearchParams(searchParam);
+    if (params.get("skills")) {
+      params.set("skills__id", params.get("skills") || "");
+      params.delete("skills");
+    }
+    params.set("limit", String(limit));
+    return params.toString();
+  };
+
   const {
-    projectsPages,
+    projectPages,
     isLoading,
     error,
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useGetInfiniteProjects(paramSkills, limit);
+  } = useGetAllInfiniteProject(getProjectQuery());
+
+  const { skillPages, isLoading: isGettingSkills } = useGetAllInfiniteSkill(
+    paramSkills.length > 0
+      ? `id=${paramSkills.join(",")}&limit=${Math.max(paramSkills.length, 1)}`
+      : "limit=1",
+  );
 
   useEffect(() => {
-    if (inView && hasNextPage && !isLoading) {
+    if (inView && hasNextPage && !isLoading && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, hasNextPage, isLoading, isFetchingNextPage, fetchNextPage]);
 
   const filterSkills =
-    skills?.rows.filter((skill) => paramSkills.includes(skill.$id)) || [];
+    skillPages?.pages
+      .flatMap((page) => page.data)
+      .filter((skill) => paramSkills.includes(String(skill.id))) || [];
 
   const removeItemFromSkillFilter = (skillId: string) => {
     if (!paramSkills.includes(skillId)) return;
@@ -64,14 +82,16 @@ function Projects() {
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex flex-wrap">
             {!isGettingSkills &&
-              skills &&
+              skillPages &&
               filterSkills.map((skill) => (
                 <div
-                  key={skill.$id}
+                  key={skill.id}
                   className="flex items-center gap-2 p-1 rounded-md bg-primary-500 m-1"
                 >
                   {skill.name}
-                  <span onClick={() => removeItemFromSkillFilter(skill.$id)}>
+                  <span
+                    onClick={() => removeItemFromSkillFilter(String(skill.id))}
+                  >
                     <BadgeX className="h-4 w-4 cursor-pointer" />
                   </span>
                 </div>
@@ -104,11 +124,11 @@ function Projects() {
       <div className="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8 mb-6">
         <AnimatePresence>
           {!isLoading &&
-            projectsPages &&
-            projectsPages.pages.map((page) =>
-              page.rows.map((project, index) => (
+            projectPages &&
+            projectPages.pages.map((page) =>
+              page.data.map((project, index) => (
                 <ProjectCard
-                  key={project.$id}
+                  key={project.id}
                   project={project}
                   addSkillFilter={addItemToSkillFilter}
                   index={index}
@@ -127,9 +147,9 @@ function Projects() {
 
       {!isLoading &&
         !isFetchingNextPage &&
-        projectsPages &&
-        projectsPages.pages &&
-        projectsPages.pages[0].total <= 0 && (
+        projectPages &&
+        projectPages.pages &&
+        projectPages.pages[0].pagination.total <= 0 && (
           <div className="flex items-center justify-center p-2 gap-2 text-slate-500">
             <p>* * No Projects Found * *</p>
           </div>
@@ -138,9 +158,9 @@ function Projects() {
       {!isFetchingNextPage &&
         !isLoading &&
         !hasNextPage &&
-        projectsPages &&
-        projectsPages.pages &&
-        projectsPages.pages[0].total > 0 && (
+        projectPages &&
+        projectPages.pages &&
+        projectPages.pages[0].pagination.total > 0 && (
           <div className="flex items-center justify-center p-2 gap-2 text-slate-500">
             <p>* * That's All * *</p>
           </div>

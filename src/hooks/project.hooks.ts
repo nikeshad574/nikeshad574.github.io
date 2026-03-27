@@ -24,10 +24,21 @@ export const useGetAllProject = (query: string) => {
 };
 
 export const useGetAProjectById = (projectId: Key) => {
-  const {} = useQuery({
+  const {
+    data: project,
+    isLoading: isGettingProject,
+    error: errorGettingProject,
+  } = useQuery({
     queryKey: [projectQueryKeys.base, projectId],
     queryFn: () => apiGetAProjectById(projectId),
+    enabled: !!projectId,
   });
+
+  return {
+    project,
+    isGettingProject,
+    errorGettingProject,
+  };
 };
 
 export const useGetAllInfiniteProject = (query: string) => {

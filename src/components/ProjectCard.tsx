@@ -2,14 +2,13 @@ import { ChevronRightCircle, Globe } from "lucide-react";
 import { Link } from "react-router";
 import cns from "../utils/classNames";
 import { motion } from "motion/react";
-import type { ProjectRowResp } from "../types/project.type";
+import type { IProjectWithSkills } from "../types/project.type";
 import { stripHTMLTags } from "../utils/commonUtils";
-import { useGetSkills } from "../hooks/skill.hooks";
 
 interface ProjectCardProps {
   className?: string;
   designType?: "vert" | "horiz";
-  project: ProjectRowResp;
+  project: IProjectWithSkills;
   addSkillFilter: (skillId: string) => void;
   index?: number;
 }
@@ -21,16 +20,11 @@ function ProjectCard({
   addSkillFilter,
   index = 0,
 }: ProjectCardProps) {
-  const { skills } = useGetSkills();
-
-  const projectSkills =
-    skills?.rows.filter((skill) => project.skills.includes(skill.$id)) || [];
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      key={project.$id}
+      key={project.id}
       exit={{ opacity: 1, y: 0, transition: { duration: 0.3 } }}
       transition={{
         delay: ((index % 3) + 1) * 0.2,
@@ -44,13 +38,13 @@ function ProjectCard({
       className={cns(
         "bg-primary-900 w-full p-4 rounded-lg flex",
         designType === "vert" ? "flex-col gap-4" : "flex-row gap-4",
-        className
+        className,
       )}
     >
       <div
         className={cns(
           "h-56 w-full bg-primary-800 rounded-xl relative",
-          designType === "horiz" ? "flex-1/2" : ""
+          designType === "horiz" ? "flex-1/2" : "",
         )}
       >
         <img
@@ -92,7 +86,7 @@ function ProjectCard({
             )}
 
             <Link
-              to={`/projects/${project.$id}`}
+              to={`/projects/${project.id}`}
               className="h-8 w-8 p-0.5 hover:text-primary-400"
               title="Read More"
             >
@@ -105,7 +99,7 @@ function ProjectCard({
       <div
         className={cns(
           "flex flex-col gap-2 ",
-          designType === "horiz" ? "flex-1/2" : ""
+          designType === "horiz" ? "flex-1/2" : "",
         )}
       >
         <h2 className="text-xl font-medium two-line-ellipsis">
@@ -117,15 +111,15 @@ function ProjectCard({
         </p>
 
         <div className="flex gap-2">
-          {projectSkills.map((skill) => (
+          {project.skills.map((skill) => (
             <motion.button
               type="button"
               className="h-9 w-9 rounded-full overflow-hidden cursor-pointer"
               initial={{ rotate: 0 }}
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
-              key={skill.$id}
-              onClick={() => addSkillFilter(skill.$id)}
+              key={skill.id}
+              onClick={() => addSkillFilter(String(skill.id))}
             >
               <img
                 src={skill.imageURL}

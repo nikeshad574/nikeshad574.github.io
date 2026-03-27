@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
-import type { SkillRowResp } from "../types/skill.type";
 import { useNavigate } from "react-router";
+import type { ISkill } from "../types/skill.type";
 
 interface SkillsTickerProps {
-  skills: SkillRowResp[];
+  skills: ISkill[];
 }
 
 const SkillsTicker = ({ skills }: SkillsTickerProps) => {
@@ -29,8 +29,8 @@ const SkillsTicker = ({ skills }: SkillsTickerProps) => {
     }
   });
 
-  const handleClick = (skill: SkillRowResp) => {
-    navigate(`/projects?skills=${encodeURIComponent(skill.$id)}`);
+  const handleClick = (skill: ISkill) => {
+    navigate(`/projects?skills=${encodeURIComponent(skill.id.toString())}`);
   };
 
   return (
