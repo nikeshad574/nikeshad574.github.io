@@ -1,5 +1,6 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { apiGetAllProjects } from "../services/apiProject";
+import { apiGetAllProjects, apiGetAProjectById } from "../services/apiProject";
+import type { Key } from "react";
 
 export const projectQueryKeys = {
   base: "project",
@@ -20,6 +21,13 @@ export const useGetAllProject = (query: string) => {
     isGettingProjects,
     errorGettingProject,
   };
+};
+
+export const useGetAProjectById = (projectId: Key) => {
+  const {} = useQuery({
+    queryKey: [projectQueryKeys.base, projectId],
+    queryFn: () => apiGetAProjectById(projectId),
+  });
 };
 
 export const useGetAllInfiniteProject = (query: string) => {

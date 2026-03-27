@@ -1,52 +1,34 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { apiGetAllContacts } from "../services/apiContact";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiCreateContact } from "../services/apiContact";
+import toast from "react-hot-toast";
+import handleAxiosError from "../utils/commonUtils";
 
 export const contactQueryKeys = {
   base: "contact",
 };
 
-export const useGetAllContact = (query: string) => {
+export const useCreateContact = () => {
+  const queryClient = useQueryClient();
   const {
-    data: contacts,
-    isLoading: isGettingContacts,
-    error: errorGettingContact,
-  } = useQuery({
-    queryKey: [contactQueryKeys.base, query],
-    queryFn: () => apiGetAllContacts(query),
-  });
-
-  return {
-    contacts,
-    isGettingContacts,
-    errorGettingContact,
-  };
-};
-
-export const useGetAllInfiniteContact = (query: string) => {
-  const {
-    data: contactPages,
-    isLoading,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey: [contactQueryKeys.base, "inf", query],
-    queryFn: ({ pageParam }) => apiGetAllContacts(`page=${pageParam}&${query}`),
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, _) => {
-      const nextPage = lastPage.pagination.has_more_pages
-        ? lastPage.pagination.current_page + 1
-        : undefined;
-      return nextPage;
+    mutate: createContact,
+    isPending: isCreatingContact,
+    isSuccess: isSuccessCreatingContact,
+    reset: resetCreateContact,
+  } = useMutation({
+    mutationFn: apiCreateContact,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [contactQueryKeys.base] });
+      toast.success("Message sent successfully!");
+    },
+    onError: (err) => {
+      toast.error(handleAxiosError(err));
     },
   });
+
   return {
-    contactPages,
-    isLoading,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
+    createContact,
+    isCreatingContact,
+    isSuccessCreatingContact,
+    resetCreateContact,
   };
 };
