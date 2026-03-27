@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { withAsyncErrorHandler } from "../utils/commonUtils";
 import { tablesDB } from "../conf/appwriteConfig";
 import conf from "../conf/conf";
-import type { AboutMeListResponse } from "../types/aboutme.types";
+import type { AboutMeListResponse } from "../types/aboutme.type";
 
 const BASE_ABOUTME_KEY = ["aboutme"];
 

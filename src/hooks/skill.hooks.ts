@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { withAsyncErrorHandler } from "../utils/commonUtils";
 import { tablesDB } from "../conf/appwriteConfig";
 import conf from "../conf/conf";
-import type { SkillListResponse } from "../types/skill.types";
+import type { SkillListResponse } from "../types/skill.type";
 import { searchQueryFromString } from "../utils/searchParamToQuery";
 import { Query } from "appwrite";
 

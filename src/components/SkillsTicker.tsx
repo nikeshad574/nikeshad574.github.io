@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
-import type { SkillRowResp } from "../types/skill.types";
+import type { SkillRowResp } from "../types/skill.type";
 import { useNavigate } from "react-router";
 
 interface SkillsTickerProps {

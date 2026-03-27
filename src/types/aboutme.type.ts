@@ -1,6 +1,7 @@
-import type { Models } from "appwrite";
+import type { Key } from "react";
 
-export interface InputCreateAboutMe {
+export interface IAboutMe {
+  id: Key;
   name: string;
   location: string;
   profession: string;
@@ -28,7 +29,6 @@ export interface InputCreateAboutMe {
   homeProfessions: string[];
   homeShortBio: string;
   photoImageURL: string;
+  created_at: string;
+  updated_at: string;
 }
-
-export interface AboutMeRowResp extends Models.DefaultRow, InputCreateAboutMe {}
-export interface AboutMeListResponse extends Models.RowList<AboutMeRowResp> {}
