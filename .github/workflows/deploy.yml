@@ -45,6 +45,7 @@ jobs:
         with:
           name: build-files
           path: ./dist
+          include-hidden-files: true
 
   # -------------------------------
   # Deploy to GitHub Pages
