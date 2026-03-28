@@ -2,40 +2,65 @@ import { Link, NavLink, useNavigate, useParams } from "react-router";
 import { ArrowUpLeft, ChevronRightCircle, Globe, Loader } from "lucide-react";
 import cns from "../../utils/classNames";
 import {
-  useGetSimilarProject,
-  useGetSingleProject,
+  useGetAProjectById,
+  useGetAllProject,
+  useGetFeaturedProjects,
 } from "../../hooks/project.hooks";
-import { useGetSkills } from "../../hooks/skill.hooks";
 import ProjectCard from "../../components/ProjectCard";
 
 function SingleProject() {
   const { projectId } = useParams<{ projectId: string }>();
-  const { project, isLoading, error } = useGetSingleProject(projectId!);
-  const { skills } = useGetSkills();
+  const { project, isGettingProject, errorGettingProject } = useGetAProjectById(
+    projectId || "",
+  );
   const navigate = useNavigate();
 
-  const { similarProjects, isLoading: isGettingSimilarProjects } =
-    useGetSimilarProject(project?.skills!, project?.$id!, 3);
+  const skillIdsQuery =
+    project?.skills
+      ?.map((skill) => String(skill.id))
+      .filter(Boolean)
+      .join(",") || "";
 
-  const projectSkills =
-    skills?.rows.filter((skill) => project?.skills?.includes(skill.$id)) || [];
+  const similarProjectsQuery = skillIdsQuery
+    ? `skills__id=${skillIdsQuery}&id=-${project?.id}&limit=3`
+    : `id=-${project?.id}&limit=3`;
 
-  if (isLoading) {
+  const {
+    projects: similarProjectsResp,
+    isGettingProjects: isGettingSimilarProjects,
+  } = useGetAllProject(similarProjectsQuery);
+
+  const {
+    projects: featuredProjectsResp,
+    isGettingProjects: isGettingFeaturedProjects,
+  } = useGetFeaturedProjects(3);
+
+  const similarProjects =
+    similarProjectsResp?.data?.filter(
+      (item) => String(item.id) !== String(project?.id),
+    ) || [];
+
+  const projectSkills = project?.skills || [];
+
+  if (isGettingProject) {
     return <div>Loading...</div>;
   }
 
-  if (!project || error) {
-    return <div>Failed to get project. {error ? error.message : ""}</div>;
+  if (!project || errorGettingProject) {
+    return (
+      <div>
+        Failed to get project.{" "}
+        {errorGettingProject ? errorGettingProject.message : ""}
+      </div>
+    );
   }
-
-  console.log(similarProjects);
 
   return (
     <section className="container flex gap-4">
       <div className=" w-full p-2">
         <div
           className={cns(
-            "aspect-video w-full bg-primary-800 rounded-xl relative mb-2"
+            "aspect-video w-full bg-primary-800 rounded-xl relative mb-2",
           )}
         >
           <img
@@ -91,9 +116,9 @@ function SingleProject() {
         <div className="flex flex-wrap items-center gap-2 mt-2">
           {projectSkills.map((skill) => (
             <Link
-              to={`/projects?skills=${skill.$id}`}
+              to={`/projects?skills=${skill.id}`}
               className="px-2 py-1 rounded-lg bg-primary/20 hover:bg-primary"
-              key={skill.$id}
+              key={skill.id}
             >
               {skill.name}
             </Link>
@@ -108,42 +133,72 @@ function SingleProject() {
         />
       </div>
 
-      <div className="w-full max-w-80 flex flex-col gap-4 p-2">
-        <h2 className="text-xl font-medium">More Projects</h2>
+      <div className="flex flex-col w-full max-w-80 gap-2 p-2">
+        <div className="w-full flex flex-col gap-4">
+          <h2 className="text-xl font-medium">More Projects</h2>
 
-        {isGettingSimilarProjects && (
-          <div className="p-2 flex items-center gap-2 text-sm">
-            <Loader className="h-5 w-5 animate-spin" />
-            Loading more projects...
-          </div>
-        )}
-
-        {!isGettingSimilarProjects &&
-          similarProjects &&
-          similarProjects.length === 0 && (
-            <div className="p-2 flex flex-col items-center gap-2 text-sm">
-              <p>No similar projects found . . .</p>
+          {isGettingSimilarProjects && (
+            <div className="p-2 flex items-center gap-2 text-sm">
+              <Loader className="h-5 w-5 animate-spin" />
+              Loading more projects...
             </div>
           )}
 
-        {!isGettingSimilarProjects &&
-          similarProjects &&
-          similarProjects.map((project) => (
-            <ProjectCard
-              key={project.$id}
-              project={project}
-              addSkillFilter={(skillId: string) => {
-                navigate(`/projects?skills=${skillId}`);
-              }}
-            />
-          ))}
+          {!isGettingSimilarProjects &&
+            similarProjects &&
+            similarProjects.length === 0 && (
+              <div className="p-2 flex flex-col items-center gap-2 text-sm">
+                <p>No similar projects found . . .</p>
+              </div>
+            )}
 
-        <NavLink
-          to="/projects"
-          className="px-4 py-2 flex items-center justify-center gap-2 w-fit mx-auto bg-primary hover:bg-primary-600 text-white rounded-lg"
-        >
-          View All <ArrowUpLeft />
-        </NavLink>
+          {!isGettingSimilarProjects &&
+            similarProjects &&
+            similarProjects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                addSkillFilter={(skillId: string) => {
+                  navigate(`/projects?skills=${skillId}`);
+                }}
+              />
+            ))}
+
+          <NavLink
+            to="/projects"
+            className="px-4 py-2 flex items-center justify-center gap-2 w-fit mx-auto bg-primary hover:bg-primary-600 text-white rounded-lg"
+          >
+            View All <ArrowUpLeft />
+          </NavLink>
+        </div>
+
+        {!isGettingFeaturedProjects &&
+          featuredProjectsResp &&
+          featuredProjectsResp.filter((p) => p.id.toString() !== projectId)
+            .length > 0 && (
+            <div className="flex flex-col gap-4">
+              <h2 className="text-xl font-medium">Featured Projects</h2>
+
+              {featuredProjectsResp
+                .filter((p) => p.id.toString() !== projectId)
+                .map((project) => (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    addSkillFilter={(skillId: string) => {
+                      navigate(`/projects?skills=${skillId}`);
+                    }}
+                  />
+                ))}
+
+              <NavLink
+                to="/projects"
+                className="px-4 py-2 flex items-center justify-center gap-2 w-fit mx-auto bg-primary hover:bg-primary-600 text-white rounded-lg"
+              >
+                View All <ArrowUpLeft />
+              </NavLink>
+            </div>
+          )}
       </div>
     </section>
   );

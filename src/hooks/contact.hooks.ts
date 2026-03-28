@@ -1,50 +1,34 @@
-import emailJs from "@emailjs/browser";
-import conf from "../conf/conf";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiCreateContact } from "../services/apiContact";
 import toast from "react-hot-toast";
-import { tablesDB } from "../conf/appwriteConfig";
-import { ID } from "appwrite";
+import handleAxiosError from "../utils/commonUtils";
 
-interface ContactEmailTemplateParams {
-  name: string;
-  email: string;
-  message: string;
-}
+export const contactQueryKeys = {
+  base: "contact",
+};
 
-export const useSendEmail = () => {
+export const useCreateContact = () => {
+  const queryClient = useQueryClient();
   const {
-    mutate: sendEmail,
-    isPending,
-    isSuccess,
+    mutate: createContact,
+    isPending: isCreatingContact,
+    isSuccess: isSuccessCreatingContact,
+    reset: resetCreateContact,
   } = useMutation({
-    mutationFn: async (templateParams: ContactEmailTemplateParams) => {
-      await tablesDB.createRow({
-        databaseId: conf.appwrite.databaseId,
-        tableId: conf.appwrite.collections.contact,
-        rowId: ID.unique(),
-        data: templateParams,
-      });
-
-      const resp = await emailJs.send(
-        conf.emailJs.serviceId,
-        conf.emailJs.templateId,
-        templateParams as any,
-        {
-          publicKey: conf.emailJs.publicKey,
-        }
-      );
-
-      if (resp.status !== 200) {
-        throw new Error(resp.text);
-      }
+    mutationFn: apiCreateContact,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [contactQueryKeys.base] });
+      toast.success("Message sent successfully!");
     },
     onError: (err) => {
-      toast.error(err.message);
-    },
-    onSuccess: () => {
-      toast.success("Email sent successfully!");
+      toast.error(handleAxiosError(err));
     },
   });
 
-  return { sendEmail, isPending, isSuccess };
+  return {
+    createContact,
+    isCreatingContact,
+    isSuccessCreatingContact,
+    resetCreateContact,
+  };
 };

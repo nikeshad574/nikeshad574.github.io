@@ -1,14 +1,11 @@
-import type { Models } from "appwrite";
+import type { Key } from "react";
 
-export interface InputCreateExperience {
+export interface IExperience {
+  id: Key;
   description: string;
   time: string;
-  orderByYear: number;
+  orderByYear: string;
   title: string;
+  created_at: string;
+  updated_at: string;
 }
-
-export interface ExperienceRowResp
-  extends Models.DefaultRow,
-    InputCreateExperience {}
-export interface ExperienceListResponse
-  extends Models.RowList<ExperienceRowResp> {}

@@ -6,20 +6,20 @@ import ProjectCard from "../../components/ProjectCard";
 import useInnerScreen from "../../hooks/useInnerScreen";
 import { Loader, SquareArrowUpRight } from "lucide-react";
 import GetInTouchContainer from "./GetInTouchContainer";
-import useGetAboutme from "../../hooks/aboutme.hooks";
-import { useGetSkills } from "../../hooks/skill.hooks";
+import { useGetAboutMe } from "../../hooks/aboutme.hooks";
+import { useGetAllSkill } from "../../hooks/skill.hooks";
 import { useGetFeaturedProjects } from "../../hooks/project.hooks";
 import { Link, useNavigate } from "react-router";
 
 function Home() {
-  const { aboutMe } = useGetAboutme();
-  const { skills, isLoading: isGettingSkills } = useGetSkills();
-  const { featuredProjects, isLoading: isGettingFeaturedProjects } =
-    useGetFeaturedProjects();
+  const { aboutMe } = useGetAboutMe();
+  const { skills, isGettingSkills } = useGetAllSkill("");
+  const { projects, isGettingProjects } = useGetFeaturedProjects(3);
   const { innerW } = useInnerScreen();
   const navigate = useNavigate();
 
-  const aboutMeValues = aboutMe?.rows[0];
+  const aboutMeValues = aboutMe;
+  const featuredProjects = projects;
 
   // console.log("Features Projects", featuredProjects);
 
@@ -83,10 +83,10 @@ function Home() {
       <section className="container">
         {isGettingSkills && <Loader className="h-5 w-5 animate-spin" />}
 
-        {!isGettingSkills && skills && <SkillsTicker skills={skills.rows} />}
+        {!isGettingSkills && skills && <SkillsTicker skills={skills.data} />}
       </section>
 
-      {!isGettingFeaturedProjects &&
+      {!isGettingProjects &&
         featuredProjects &&
         featuredProjects.length === 3 && (
           <section className="container">

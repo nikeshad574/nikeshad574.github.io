@@ -25,6 +25,7 @@
       no-repeat;
     color: hsl(248, 19%, 92%);
     min-height: calc(100svh - theme(height.14));
+    overflow-x: hidden;
   }
 }
 

@@ -1,6 +1,12 @@
-import { useCallback, useEffect, useState, type FormEventHandler } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type FormEventHandler,
+} from "react";
 import GlowingButton from "../../components/GlowingButton";
-import { useSendEmail } from "../../hooks/contact.hooks";
+import { useCreateContact } from "../../hooks/contact.hooks";
 import { Loader2 } from "lucide-react";
 
 interface SingleInputData<T> {
@@ -16,10 +22,11 @@ interface FormValueInputs {
 
 function WorkingForm() {
   const {
-    sendEmail,
-    isPending: isSendingEmail,
-    isSuccess: isSuccessSendingEmail,
-  } = useSendEmail();
+    createContact,
+    isCreatingContact,
+    isSuccessCreatingContact,
+    resetCreateContact,
+  } = useCreateContact();
 
   const [values, setValues] = useState<FormValueInputs>({
     name: { value: "" },
@@ -29,9 +36,7 @@ function WorkingForm() {
 
   const register = useCallback(
     (fieldName: string, validation: Record<string, string | string[]>) => ({
-      onChange: (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      ) => {
+      onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (validation.required && e.target.value.trim() === "") {
           setValues((prev) => ({
             ...prev,
@@ -66,7 +71,7 @@ function WorkingForm() {
       name: fieldName,
       value: values[fieldName as keyof FormValueInputs].value,
     }),
-    [values]
+    [values],
   );
 
   const handleForm: FormEventHandler = (e) => {
@@ -76,7 +81,7 @@ function WorkingForm() {
     if (errorExist) {
       return;
     }
-    sendEmail({
+    createContact({
       name: values.name.value,
       email: values.email.value,
       message: values.message.value,
@@ -84,14 +89,15 @@ function WorkingForm() {
   };
 
   useEffect(() => {
-    if (!isSendingEmail && isSuccessSendingEmail) {
+    if (!isCreatingContact && isSuccessCreatingContact) {
       setValues({
         name: { value: "" },
         email: { value: "" },
         message: { value: "" },
       });
+      resetCreateContact();
     }
-  }, [isSendingEmail]);
+  }, [isCreatingContact, isSuccessCreatingContact, resetCreateContact]);
 
   return (
     <form onSubmit={handleForm} className="flex-1/2 flex flex-col gap-4 p-4">
@@ -102,7 +108,7 @@ function WorkingForm() {
         <input
           type="text"
           className="outline focus:outline-primary-400 rounded-md px-2 py-1"
-          disabled={isSendingEmail}
+          disabled={isCreatingContact}
           {...register("name", { required: "Name is required" })}
         />
         {values.name.error && (
@@ -116,7 +122,7 @@ function WorkingForm() {
         <input
           type="email"
           className="outline focus:outline-primary-400 rounded-md px-2 py-1"
-          disabled={isSendingEmail}
+          disabled={isCreatingContact}
           {...register("email", {
             required: "Email is required",
             pattern: [
@@ -136,7 +142,7 @@ function WorkingForm() {
         </label>
         <textarea
           className="outline focus:outline-primary-400 rounded-md px-2 py-1 h-32 resize-none"
-          disabled={isSendingEmail}
+          disabled={isCreatingContact}
           {...register("message", {
             required: "Message is required",
             pattern: [
@@ -152,12 +158,11 @@ function WorkingForm() {
 
       <div className="flex justify-end">
         <GlowingButton
-          onClick={() => console.log("clicked")}
           className="w-fit px-6 py-2 font-medium text-md"
-          disabled={isSendingEmail}
+          disabled={isCreatingContact}
         >
           Get In Touch
-          {isSendingEmail && <Loader2 className="h-4 w-4 animate-spin" />}
+          {isCreatingContact && <Loader2 className="h-4 w-4 animate-spin" />}
         </GlowingButton>
       </div>
     </form>

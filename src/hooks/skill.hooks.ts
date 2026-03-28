@@ -1,52 +1,52 @@
-import { useQuery } from "@tanstack/react-query";
-import { withAsyncErrorHandler } from "../utils/commonUtils";
-import { tablesDB } from "../conf/appwriteConfig";
-import conf from "../conf/conf";
-import type { SkillListResponse } from "../types/skill.types";
-import { searchQueryFromString } from "../utils/searchParamToQuery";
-import { Query } from "appwrite";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { apiGetAllSkills } from "../services/apiSkills";
 
-const BASE_SKILLS_KEY = ["skills"];
-
-export const useGetSkills = () => {
-  const {
-    data: skills,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: BASE_SKILLS_KEY,
-    queryFn: withAsyncErrorHandler(async () => {
-      const res = (await tablesDB.listRows({
-        databaseId: conf.appwrite.databaseId,
-        tableId: conf.appwrite.collections.skills,
-        queries: [Query.orderDesc("$createdAt")],
-      })) as SkillListResponse;
-      return res;
-    }),
-  });
-
-  return { skills, isLoading, error };
+export const skillQueryKeys = {
+  base: "skill",
 };
 
-export const useGetSearchSkills = (searchTxt: string) => {
+export const useGetAllSkill = (query: string) => {
   const {
     data: skills,
-    isLoading,
-    error,
+    isLoading: isGettingSkills,
+    error: errorGettingSkill,
   } = useQuery({
-    queryKey: [...BASE_SKILLS_KEY, "search", searchTxt],
-    queryFn: withAsyncErrorHandler(async () => {
-      const res = (await tablesDB.listRows({
-        databaseId: conf.appwrite.databaseId,
-        tableId: conf.appwrite.collections.skills,
-        queries: [
-          ...searchQueryFromString(searchTxt, ["name"]),
-          Query.orderDesc("$createdAt"),
-        ],
-      })) as SkillListResponse;
-      return res;
-    }),
+    queryKey: [skillQueryKeys.base, query],
+    queryFn: () => apiGetAllSkills(query),
   });
 
-  return { skills, isLoading, error };
+  return {
+    skills,
+    isGettingSkills,
+    errorGettingSkill,
+  };
+};
+
+export const useGetAllInfiniteSkill = (query: string) => {
+  const {
+    data: skillPages,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: [skillQueryKeys.base, "inf", query],
+    queryFn: ({ pageParam }) => apiGetAllSkills(`page=${pageParam}&${query}`),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, _) => {
+      const nextPage = lastPage.pagination.has_more_pages
+        ? lastPage.pagination.current_page + 1
+        : undefined;
+      return nextPage;
+    },
+  });
+  return {
+    skillPages,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  };
 };

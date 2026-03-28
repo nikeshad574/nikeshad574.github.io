@@ -1,16 +1,16 @@
 import { Loader, Mail } from "lucide-react";
-import useGetAboutme from "../../hooks/aboutme.hooks";
+import { useGetAboutMe } from "../../hooks/aboutme.hooks";
 import WorkingForm from "./WorkingForm";
 
 function GetInTouchContainer() {
-  const { aboutMe, isLoading, error } = useGetAboutme();
+  const { aboutMe, isGettingAboutMe, errorGettingAboutMe } = useGetAboutMe();
 
-  const aboutMeValues = aboutMe?.rows[0];
+  const aboutMeValues = aboutMe;
   const rawSocials = aboutMeValues?.socials;
   const socials =
     typeof rawSocials === "string"
       ? JSON.parse(rawSocials)
-      : rawSocials ?? null;
+      : (rawSocials ?? {});
 
   return (
     <section className="container">
@@ -24,21 +24,21 @@ function GetInTouchContainer() {
         say hello.
       </p>
 
-      {!isLoading && error && (
+      {!isGettingAboutMe && errorGettingAboutMe && (
         <div className="flex flex-col sm:flex-row justify-between">
           <p className="text-red-500">Error loading contact information.</p>
-          <p>{error.message}</p>
+          <p>{errorGettingAboutMe.message}</p>
         </div>
       )}
 
-      {isLoading && (
+      {isGettingAboutMe && (
         <div className="flex justify-center items-center">
           <p>Loading contact information...</p>
           <Loader className="h-6 w-6 animate-spin" />
         </div>
       )}
 
-      {!isLoading && aboutMe && aboutMeValues && (
+      {!isGettingAboutMe && aboutMe && aboutMeValues && (
         <div className="flex flex-col sm:flex-row justify-between">
           <div className="bg-radial from-primary-900 to-primary-900/20  rounded-lg flex-1/2 flex flex-col gap-4 items-center justify-center p-4">
             <div>

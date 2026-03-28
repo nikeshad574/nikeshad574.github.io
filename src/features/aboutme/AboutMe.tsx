@@ -1,11 +1,11 @@
 import { Loader, Printer } from "lucide-react";
-import { useCallback, useEffect, useRef } from "react";
-import useGetAboutme from "../../hooks/aboutme.hooks";
-import { useGetSkills } from "../../hooks/skill.hooks";
+import { useCallback, useRef } from "react";
+import { useGetAboutMe } from "../../hooks/aboutme.hooks";
+import { useGetAllSkill } from "../../hooks/skill.hooks";
 
 function AboutMe() {
-  const { aboutMe, isLoading, error } = useGetAboutme();
-  const { skills, isLoading: isGettingSkills } = useGetSkills();
+  const { aboutMe, isGettingAboutMe, errorGettingAboutMe } = useGetAboutMe();
+  const { skills, isGettingSkills } = useGetAllSkill("");
 
   const printableRef = useRef<HTMLDivElement>(null);
 
@@ -30,7 +30,7 @@ function AboutMe() {
     doc.open();
 
     const styles = Array.from(
-      document.querySelectorAll('link[rel="stylesheet"]')
+      document.querySelectorAll('link[rel="stylesheet"]'),
     )
       .map((link) => link.outerHTML)
       .join("\n");
@@ -71,11 +71,7 @@ function AboutMe() {
     };
   }, []);
 
-  useEffect(() => {
-    return () => {};
-  }, []);
-
-  const aboutMeValues = aboutMe?.rows[0];
+  const aboutMeValues = aboutMe;
 
   const parseMaybeJsonArray = (arr: any[] | undefined) => {
     if (!arr) return [];
@@ -92,10 +88,10 @@ function AboutMe() {
   };
 
   const professionalExperiences = parseMaybeJsonArray(
-    aboutMeValues?.professionalExperiences as any[] | undefined
+    aboutMeValues?.professionalExperiences as any[] | undefined,
   );
   const education = parseMaybeJsonArray(
-    aboutMeValues?.education as any[] | undefined
+    aboutMeValues?.education as any[] | undefined,
   );
 
   return (
@@ -110,19 +106,19 @@ function AboutMe() {
         </button>
       </div>
 
-      {isLoading && (
+      {isGettingAboutMe && (
         <div className="border border-primary-100/40 rounded-md p-4 print:text-black">
           <Loader className="h-6 w-6 animate-spin" />
         </div>
       )}
 
-      {error && (
+      {errorGettingAboutMe && (
         <div className="border border-primary-100/40 rounded-md p-4 print:text-black">
-          <p className="text-red-500">Failed, {error.message}</p>
+          <p className="text-red-500">Failed, {errorGettingAboutMe.message}</p>
         </div>
       )}
 
-      {!isLoading && aboutMe && aboutMeValues && (
+      {!isGettingAboutMe && aboutMe && aboutMeValues && (
         <div
           id="resume"
           ref={printableRef}
@@ -157,7 +153,7 @@ function AboutMe() {
                 <span className="font-medium mr-2">Technical Skills:</span>
                 {!isGettingSkills &&
                   skills &&
-                  skills.rows.map((skill) => skill.name).join(", ")}
+                  skills.data.map((skill) => skill.name).join(", ")}
                 {isGettingSkills && (
                   <Loader className="ml-2 inline-block animate-spin h-4 w-4" />
                 )}

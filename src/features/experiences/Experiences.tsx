@@ -1,26 +1,26 @@
 import { motion } from "motion/react";
 import cns from "../../utils/classNames";
-import { useGetInfiniteExperiences } from "../../hooks/experience.hooks";
+import { useGetAllInfiniteExperience } from "../../hooks/experience.hooks";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
 
 function Experiences() {
   const {
-    experiences,
+    experiencePages,
     fetchNextPage,
     hasNextPage,
     isLoading,
     isFetchingNextPage,
     error,
-  } = useGetInfiniteExperiences(6);
+  } = useGetAllInfiniteExperience("limit=6");
   const { ref, inView } = useInView();
 
   useEffect(() => {
-    if (inView && hasNextPage && !isLoading) {
+    if (inView && hasNextPage && !isLoading && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, hasNextPage, isLoading, isFetchingNextPage, fetchNextPage]);
 
   return (
     <section className="container flex flex-col gap-6 py-12 mb-8">
@@ -44,15 +44,15 @@ function Experiences() {
 
         <motion.div className="flex flex-col gap-8">
           {!isLoading &&
-            experiences &&
-            experiences.pages &&
-            experiences.pages.map((page) =>
-              page.rows.map((experience, index) => (
+            experiencePages &&
+            experiencePages.pages &&
+            experiencePages.pages.map((page) =>
+              page.data.map((experience, index) => (
                 <motion.div
-                  key={experience.$id}
+                  key={experience.id}
                   className={cns(
                     "p-4 pt-6 mt-1 rounded-md bg-primary-800 relative",
-                    index % 2 === 0 ? "max-w-3xl" : "max-w-4xl"
+                    index % 2 === 0 ? "max-w-3xl" : "max-w-4xl",
                   )}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -77,7 +77,7 @@ function Experiences() {
                     <p>{experience.description}</p>
                   </div>
                 </motion.div>
-              ))
+              )),
             )}
         </motion.div>
       </div>
