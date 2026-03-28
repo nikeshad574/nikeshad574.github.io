@@ -1,5 +1,9 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { apiGetAllProjects, apiGetAProjectById } from "../services/apiProject";
+import {
+  apiGetAllProjects,
+  apiGetAProjectById,
+  apiGetFeaturedProjects,
+} from "../services/apiProject";
 import type { Key } from "react";
 
 export const projectQueryKeys = {
@@ -68,4 +72,16 @@ export const useGetAllInfiniteProject = (query: string) => {
     hasNextPage,
     isFetchingNextPage,
   };
+};
+
+export const useGetFeaturedProjects = (count: number) => {
+  const {
+    data: projects,
+    isPending: isGettingProjects,
+    error: errorGettingProjects,
+  } = useQuery({
+    queryKey: [projectQueryKeys.base, "featured", count],
+    queryFn: () => apiGetFeaturedProjects(count),
+  });
+  return { projects, isGettingProjects, errorGettingProjects };
 };

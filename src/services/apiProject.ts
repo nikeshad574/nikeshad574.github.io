@@ -16,3 +16,10 @@ export const apiGetAProjectById = async (
   const resp = await axios.get(`/api/project/${id}`);
   return resp.data.data;
 };
+
+export const apiGetFeaturedProjects = async (
+  count: number,
+): Promise<IProjectWithSkills[]> => {
+  const resp = await axios.get(`/api/project/featured/${count}`);
+  return resp.data.data;
+};

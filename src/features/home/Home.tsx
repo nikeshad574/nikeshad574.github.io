@@ -8,21 +8,18 @@ import { Loader, SquareArrowUpRight } from "lucide-react";
 import GetInTouchContainer from "./GetInTouchContainer";
 import { useGetAboutMe } from "../../hooks/aboutme.hooks";
 import { useGetAllSkill } from "../../hooks/skill.hooks";
-import { useGetAllProject } from "../../hooks/project.hooks";
+import { useGetFeaturedProjects } from "../../hooks/project.hooks";
 import { Link, useNavigate } from "react-router";
 
 function Home() {
   const { aboutMe } = useGetAboutMe();
   const { skills, isGettingSkills } = useGetAllSkill("");
-  const {
-    projects: featuredProjectsResp,
-    isGettingProjects: isGettingFeaturedProjects,
-  } = useGetAllProject("isFeatured=true&per_page=3");
+  const { projects, isGettingProjects } = useGetFeaturedProjects(3);
   const { innerW } = useInnerScreen();
   const navigate = useNavigate();
 
   const aboutMeValues = aboutMe;
-  const featuredProjects = featuredProjectsResp?.data;
+  const featuredProjects = projects;
 
   // console.log("Features Projects", featuredProjects);
 
@@ -89,7 +86,7 @@ function Home() {
         {!isGettingSkills && skills && <SkillsTicker skills={skills.data} />}
       </section>
 
-      {!isGettingFeaturedProjects &&
+      {!isGettingProjects &&
         featuredProjects &&
         featuredProjects.length === 3 && (
           <section className="container">

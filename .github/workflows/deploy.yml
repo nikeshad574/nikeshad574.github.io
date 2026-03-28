@@ -36,16 +36,6 @@ jobs:
       - name: Create .env file
         run: |
           echo "VITE_APPWRITE_DATABASE_ID=${{ secrets.VITE_APPWRITE_DATABASE_ID }}" >> .env.production
-          echo "VITE_APPWRITE_EXPERIENCE_COLLECTION=${{ secrets.VITE_APPWRITE_EXPERIENCE_COLLECTION }}" >> .env.production
-          echo "VITE_APPWRITE_ABOUTME_COLLECTION=${{ secrets.VITE_APPWRITE_ABOUTME_COLLECTION }}" >> .env.production
-          echo "VITE_APPWRITE_CONTACT_COLLECTION=${{ secrets.VITE_APPWRITE_CONTACT_COLLECTION }}" >> .env.production
-          echo "VITE_APPWRITE_SKILL_COLLECTION=${{ secrets.VITE_APPWRITE_SKILL_COLLECTION }}" >> .env.production
-          echo "VITE_APPWRITE_PROJECT_COLLECTION=${{ secrets.VITE_APPWRITE_PROJECT_COLLECTION }}" >> .env.production
-          echo "VITE_APPWRITE_ENDPOINT=${{ secrets.VITE_APPWRITE_ENDPOINT }}" >> .env.production
-          echo "VITE_APPWRITE_PROJECT_ID=${{ secrets.VITE_APPWRITE_PROJECT_ID }}" >> .env.production
-          echo "VITE_EMAILJS_SERVICE_ID=${{ secrets.VITE_EMAILJS_SERVICE_ID }}" >> .env.production
-          echo "VITE_EMAILJS_TEMPLATE_ID=${{ secrets.VITE_EMAILJS_TEMPLATE_ID }}" >> .env.production
-          echo "VITE_EMAILJS_PUBLIC_KEY=${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}" >> .env.production
 
       - name: Build
         run: npm run build

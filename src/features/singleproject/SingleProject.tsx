@@ -4,6 +4,7 @@ import cns from "../../utils/classNames";
 import {
   useGetAProjectById,
   useGetAllProject,
+  useGetFeaturedProjects,
 } from "../../hooks/project.hooks";
 import ProjectCard from "../../components/ProjectCard";
 
@@ -28,6 +29,11 @@ function SingleProject() {
     projects: similarProjectsResp,
     isGettingProjects: isGettingSimilarProjects,
   } = useGetAllProject(similarProjectsQuery);
+
+  const {
+    projects: featuredProjectsResp,
+    isGettingProjects: isGettingFeaturedProjects,
+  } = useGetFeaturedProjects(3);
 
   const similarProjects =
     similarProjectsResp?.data?.filter(
@@ -127,42 +133,72 @@ function SingleProject() {
         />
       </div>
 
-      <div className="w-full max-w-80 flex flex-col gap-4 p-2">
-        <h2 className="text-xl font-medium">More Projects</h2>
+      <div className="flex flex-col w-full max-w-80 gap-2 p-2">
+        <div className="w-full flex flex-col gap-4">
+          <h2 className="text-xl font-medium">More Projects</h2>
 
-        {isGettingSimilarProjects && (
-          <div className="p-2 flex items-center gap-2 text-sm">
-            <Loader className="h-5 w-5 animate-spin" />
-            Loading more projects...
-          </div>
-        )}
-
-        {!isGettingSimilarProjects &&
-          similarProjects &&
-          similarProjects.length === 0 && (
-            <div className="p-2 flex flex-col items-center gap-2 text-sm">
-              <p>No similar projects found . . .</p>
+          {isGettingSimilarProjects && (
+            <div className="p-2 flex items-center gap-2 text-sm">
+              <Loader className="h-5 w-5 animate-spin" />
+              Loading more projects...
             </div>
           )}
 
-        {!isGettingSimilarProjects &&
-          similarProjects &&
-          similarProjects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              addSkillFilter={(skillId: string) => {
-                navigate(`/projects?skills=${skillId}`);
-              }}
-            />
-          ))}
+          {!isGettingSimilarProjects &&
+            similarProjects &&
+            similarProjects.length === 0 && (
+              <div className="p-2 flex flex-col items-center gap-2 text-sm">
+                <p>No similar projects found . . .</p>
+              </div>
+            )}
 
-        <NavLink
-          to="/projects"
-          className="px-4 py-2 flex items-center justify-center gap-2 w-fit mx-auto bg-primary hover:bg-primary-600 text-white rounded-lg"
-        >
-          View All <ArrowUpLeft />
-        </NavLink>
+          {!isGettingSimilarProjects &&
+            similarProjects &&
+            similarProjects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                addSkillFilter={(skillId: string) => {
+                  navigate(`/projects?skills=${skillId}`);
+                }}
+              />
+            ))}
+
+          <NavLink
+            to="/projects"
+            className="px-4 py-2 flex items-center justify-center gap-2 w-fit mx-auto bg-primary hover:bg-primary-600 text-white rounded-lg"
+          >
+            View All <ArrowUpLeft />
+          </NavLink>
+        </div>
+
+        {!isGettingFeaturedProjects &&
+          featuredProjectsResp &&
+          featuredProjectsResp.filter((p) => p.id.toString() !== projectId)
+            .length > 0 && (
+            <div className="flex flex-col gap-4">
+              <h2 className="text-xl font-medium">Featured Projects</h2>
+
+              {featuredProjectsResp
+                .filter((p) => p.id.toString() !== projectId)
+                .map((project) => (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    addSkillFilter={(skillId: string) => {
+                      navigate(`/projects?skills=${skillId}`);
+                    }}
+                  />
+                ))}
+
+              <NavLink
+                to="/projects"
+                className="px-4 py-2 flex items-center justify-center gap-2 w-fit mx-auto bg-primary hover:bg-primary-600 text-white rounded-lg"
+              >
+                View All <ArrowUpLeft />
+              </NavLink>
+            </div>
+          )}
       </div>
     </section>
   );
