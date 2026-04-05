@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate, useParams } from "react-router";
-import { ArrowUpLeft, ChevronRightCircle, Globe, Loader } from "lucide-react";
+import { ChevronRightCircle, Globe, Loader } from "lucide-react";
 import cns from "../../utils/classNames";
 import {
   useGetAProjectById,
