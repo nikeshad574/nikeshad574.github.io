@@ -7,6 +7,7 @@ import {
   useGetFeaturedProjects,
 } from "../../hooks/project.hooks";
 import ProjectCard from "../../components/ProjectCard";
+import SEO from "../../components/SEO";
 
 function SingleProject() {
   const { projectId } = useParams<{ projectId: string }>();
@@ -55,8 +56,21 @@ function SingleProject() {
     );
   }
 
+  const projectSEOData = {
+    title: project?.title || "Project",
+    description: project?.content
+      ? project.content.replace(/<[^>]+>/g, "").slice(0, 160)
+      : "Project details",
+    canonical: `https://nikeshad574.com/projects/${project.id}}`,
+  };
+
   return (
     <section className="container flex gap-4">
+      <SEO
+        title={projectSEOData.title}
+        description={projectSEOData.description}
+        canonical={projectSEOData.canonical}
+      />
       <div className=" w-full p-2">
         <div
           className={cns(
@@ -135,7 +149,15 @@ function SingleProject() {
 
       <div className="flex flex-col w-full max-w-80 gap-2 p-2">
         <div className="w-full flex flex-col gap-4">
-          <h2 className="text-xl font-medium">More Projects</h2>
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-xl font-medium">More Projects</h2>
+            <NavLink
+              to="/projects"
+              className="text-sm font-bold text-violet-400 hover:text-violet-600"
+            >
+              See More
+            </NavLink>
+          </div>
 
           {isGettingSimilarProjects && (
             <div className="p-2 flex items-center gap-2 text-sm">
@@ -163,21 +185,22 @@ function SingleProject() {
                 }}
               />
             ))}
-
-          <NavLink
-            to="/projects"
-            className="px-4 py-2 flex items-center justify-center gap-2 w-fit mx-auto bg-primary hover:bg-primary-600 text-white rounded-lg"
-          >
-            View All <ArrowUpLeft />
-          </NavLink>
         </div>
 
         {!isGettingFeaturedProjects &&
           featuredProjectsResp &&
           featuredProjectsResp.filter((p) => p.id.toString() !== projectId)
             .length > 0 && (
-            <div className="flex flex-col gap-4">
-              <h2 className="text-xl font-medium">Featured Projects</h2>
+            <div className="flex flex-col gap-4 mt-3">
+              <div className="flex items-center justify-between gap-2">
+                <h2 className="text-xl font-medium">Featured Projects</h2>
+                <NavLink
+                  to="/projects"
+                  className="text-sm font-bold text-violet-400 hover:text-violet-600"
+                >
+                  See More
+                </NavLink>
+              </div>
 
               {featuredProjectsResp
                 .filter((p) => p.id.toString() !== projectId)
@@ -190,13 +213,6 @@ function SingleProject() {
                     }}
                   />
                 ))}
-
-              <NavLink
-                to="/projects"
-                className="px-4 py-2 flex items-center justify-center gap-2 w-fit mx-auto bg-primary hover:bg-primary-600 text-white rounded-lg"
-              >
-                View All <ArrowUpLeft />
-              </NavLink>
             </div>
           )}
       </div>

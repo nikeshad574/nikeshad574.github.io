@@ -4,6 +4,7 @@ import { useGetAllInfiniteExperience } from "../../hooks/experience.hooks";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
+import SEO from "../../components/SEO";
 
 function Experiences() {
   const {
@@ -24,6 +25,11 @@ function Experiences() {
 
   return (
     <section className="container flex flex-col gap-6 py-12 mb-8">
+      <SEO
+        title="My Experiences"
+        description="Discover the professional experiences of Nikesh Adhikari, a full stack developer based in Nepal. Explore his work history, skills, and accomplishments in the tech industry. View his portfolio and hire him for your next project."
+        canonical="https://nikeshad574.com/experiences"
+      />
       <h1 className="text-3xl font-medium">My Experiences</h1>
 
       {isLoading && (

@@ -8,6 +8,7 @@ import { useInView } from "react-intersection-observer";
 import { useSearchParams } from "react-router";
 import { useGetAllInfiniteSkill } from "../../hooks/skill.hooks";
 import { AnimatePresence } from "motion/react";
+import SEO from "../../components/SEO";
 
 const limit = 6;
 
@@ -76,6 +77,11 @@ function Projects() {
 
   return (
     <section className="flex flex-col pb-10">
+      <SEO
+        title="Projects"
+        description="Explore the projects of Nikesh Adhikari, a full stack developer based in Nepal. Discover his work in WordPress, Laravel, and MERN stack. View his portfolio and hire him for your next project."
+        canonical="https://nikeshad574.com/projects"
+      />
       <div className="container flex flex-wrap gap-2 md:gap-4 items-center justify-between">
         <h1 className="text-3xl font-medium">Projects</h1>
 

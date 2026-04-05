@@ -2,6 +2,7 @@ import { Loader, Printer } from "lucide-react";
 import { useCallback, useRef } from "react";
 import { useGetAboutMe } from "../../hooks/aboutme.hooks";
 import { useGetAllSkill } from "../../hooks/skill.hooks";
+import SEO from "../../components/SEO";
 
 function AboutMe() {
   const { aboutMe, isGettingAboutMe, errorGettingAboutMe } = useGetAboutMe();
@@ -96,6 +97,11 @@ function AboutMe() {
 
   return (
     <section className="container mb-6">
+      <SEO
+        title="About Me"
+        description="Learn more about Nikesh Adhikari, a full stack developer based in Nepal. Discover his skills, experience, and professional background. View his resume and portfolio."
+        canonical="https://nikeshad574.com/about"
+      />
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-medium mb-4">About Me</h1>
         <button

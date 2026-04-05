@@ -10,6 +10,7 @@ import { useGetAboutMe } from "../../hooks/aboutme.hooks";
 import { useGetAllSkill } from "../../hooks/skill.hooks";
 import { useGetFeaturedProjects } from "../../hooks/project.hooks";
 import { Link, useNavigate } from "react-router";
+import SEO from "../../components/SEO";
 
 function Home() {
   const { aboutMe } = useGetAboutMe();
@@ -25,6 +26,11 @@ function Home() {
 
   return (
     <section className="flex flex-col gap-10 pb-10">
+      <SEO
+        title=""
+        description="Full stack developer in Nepal specializing in WordPress, Laravel and MERN stack. I build fast, modern and SEO-friendly websites. View my portfolio and hire me."
+        canonical="https://nikeshad574.com"
+      />
       <section className="container h-screen h-full-minus-nav flex flex-col sm:flex-row">
         <div className="p-2 w-full flex flex-col gap-3 justify-center">
           <h1 className="text-3xl font-medium">

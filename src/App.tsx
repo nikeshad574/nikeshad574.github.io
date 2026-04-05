@@ -6,6 +6,7 @@ import SuspenseFallBack from "./components/SuspenseFallBack";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
+import { HelmetProvider } from "react-helmet-async";
 
 function App() {
   const queryClient = new QueryClient({
@@ -24,17 +25,22 @@ function App() {
       <ReactQueryDevtools initialIsOpen={false} />
       <Suspense fallback={<SuspenseFallBack />}>
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<BaseLayout />}>
-              <Route index element={<P.Home />} />
-              <Route path="projects" element={<P.Projects />} />
-              <Route path="projects/:projectId" element={<P.SingleProject />} />
-              <Route path="experiences" element={<P.Experiences />} />
-              <Route path="about" element={<P.AboutMe />} />
-              <Route path="contact" element={<P.Contact />} />
-              <Route path="*" element={<P.NotFoundPage />} />
-            </Route>
-          </Routes>
+          <HelmetProvider>
+            <Routes>
+              <Route path="/" element={<BaseLayout />}>
+                <Route index element={<P.Home />} />
+                <Route path="projects" element={<P.Projects />} />
+                <Route
+                  path="projects/:projectId"
+                  element={<P.SingleProject />}
+                />
+                <Route path="experiences" element={<P.Experiences />} />
+                <Route path="about" element={<P.AboutMe />} />
+                <Route path="contact" element={<P.Contact />} />
+                <Route path="*" element={<P.NotFoundPage />} />
+              </Route>
+            </Routes>
+          </HelmetProvider>
         </BrowserRouter>
       </Suspense>
     </QueryClientProvider>
